@@ -130,6 +130,25 @@
     .chip:nth-child(3) { background: #9eb8ff; color: #102353; }
     label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; font-weight: 700; }
     .field { display: flex; gap: 8px; }
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+    .remember input {
+      flex: 0 0 auto;
+      width: 17px;
+      height: 17px;
+      min-width: 17px;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
     input {
       min-width: 0;
       flex: 1;
@@ -197,6 +216,10 @@
             <input id="passphrase" type="password" autocomplete="current-password" autofocus required>
             <button id="unlockBtn" type="submit">Entrar</button>
           </div>
+          <label class="remember" for="rememberPassphrase">
+            <input id="rememberPassphrase" type="checkbox">
+            Recordar clave en este navegador
+          </label>
           <div class="status" id="status"></div>
         </form>
         <div class="small">Esta página no indexa el contenido y el diccionario no está publicado en texto plano.</div>
@@ -206,8 +229,20 @@
   <script>
     const form = document.getElementById('unlockForm');
     const input = document.getElementById('passphrase');
+    const rememberInput = document.getElementById('rememberPassphrase');
     const button = document.getElementById('unlockBtn');
     const statusEl = document.getElementById('status');
+    const savedPassphraseKey = 'koineDictionaryPassphrase';
+
+    try {
+      const savedPassphrase = localStorage.getItem(savedPassphraseKey);
+      if (savedPassphrase) {
+        input.value = savedPassphrase;
+        rememberInput.checked = true;
+      }
+    } catch (error) {
+      rememberInput.disabled = true;
+    }
 
     function fromBase64(value) {
       const raw = atob(value);
@@ -268,6 +303,13 @@
       button.disabled = true;
       try {
         const html = await unlock(input.value);
+        try {
+          if (rememberInput.checked) {
+            localStorage.setItem(savedPassphraseKey, input.value);
+          } else {
+            localStorage.removeItem(savedPassphraseKey);
+          }
+        } catch (error) {}
         statusEl.className = 'status ok';
         statusEl.textContent = 'Clave correcta. Cargando...';
         document.open();
