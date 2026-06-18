@@ -2,8 +2,8 @@
   "version": 1,
   "algorithm": "PBKDF2-SHA256/AES-256-GCM",
   "iterations": 310000,
-  "salt": "e/7XLMj3QWyqPSDExLyynQ==",
-  "iv": "1k4SKZ9gz+MExq/+",
+  "salt": "SrQXNAGgV8+yMt5MwQMnwQ==",
+  "iv": "uf++X8rS0ueWsTND",
   "chunks": [
     "payload/chunk-00.txt",
     "payload/chunk-01.txt",
