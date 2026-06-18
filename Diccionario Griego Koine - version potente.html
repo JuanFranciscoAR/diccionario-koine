@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diccionario Griego Koiné</title>
+<style>
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  color-scheme: light;
+  --bg:        #fff7ea;
+  --surface:   #fffdf8;
+  --surface2:  #f4ebdd;
+  --border:    #eadbc7;
+  --border2:   #d9bfa3;
+  --azul:      #4f72da;
+  --azul-lt:   #3c60c8;
+  --verde:     #20b986;
+  --morado:    #8f73df;
+  --ambar:     #efa73a;
+  --rosa:      #e66d9f;
+  --teal:      #25a99b;
+  --gris:      #7a6f64;
+  --blanco:    #1f2a35;
+  --texto:     #3f4852;
+  --muted-soft:#8b8175;
+  --hero-bg:   radial-gradient(circle at 9% 18%, rgba(61,215,165,0.42), transparent 18rem),
+                radial-gradient(circle at 74% 2%, rgba(255,198,77,0.40), transparent 20rem),
+                radial-gradient(circle at 98% 64%, rgba(255,114,154,0.20), transparent 21rem),
+                linear-gradient(135deg, #fff7e8 0%, #eef8e9 45%, #fff3e1 100%);
+  --panel-bg:  rgba(255,253,248,0.88);
+  --focus:     rgba(71,120,214,0.18);
+  --greek-font: 'Noto Serif', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Times New Roman', serif;
+  --ui-font:   Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius:    24px;
+  --radius-sm: 12px;
+  --shadow:    0 18px 50px rgba(84,64,39,0.14);
+}
+
+body[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:        #11151b;
+  --surface:   #1a2029;
+  --surface2:  #242c38;
+  --border:    #303948;
+  --border2:   #465263;
+  --azul:      #6fa1ff;
+  --azul-lt:   #9bbdff;
+  --verde:     #69dba4;
+  --morado:    #b9a3ff;
+  --ambar:     #f5b84b;
+  --rosa:      #f58fbd;
+  --teal:      #5ad8cb;
+  --gris:      #9ba7b6;
+  --blanco:    #f1f5f9;
+  --texto:     #d8dee7;
+  --muted-soft:#9ba7b6;
+  --hero-bg:   radial-gradient(circle at 9% 18%, rgba(61,215,165,0.18), transparent 20rem),
+                radial-gradient(circle at 74% 2%, rgba(245,184,75,0.16), transparent 22rem),
+                radial-gradient(circle at 98% 64%, rgba(245,143,189,0.14), transparent 21rem),
+                linear-gradient(135deg, #101722 0%, #151d29 50%, #102319 100%);
+  --panel-bg:  rgba(26,32,41,0.88);
+  --focus:     rgba(111,161,255,0.18);
+  --shadow:    0 18px 50px rgba(0,0,0,0.34);
+}
+
+body {
+  font-family: var(--ui-font);
+  background: var(--bg);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0;
+}
+
+/* ── Header ── */
+header {
+  background: var(--hero-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 24px 22px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+}
+
+header::before,
+header::after {
+  content: '';
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: -1;
+}
+header::before {
+  width: 220px;
+  height: 220px;
+  right: 8%;
+  top: -104px;
+  background: rgba(79,114,218,0.13);
+}
+header::after {
+  width: 160px;
+  height: 160px;
+  right: 25%;
+  bottom: -92px;
+  background: rgba(245,143,189,0.16);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.logo-icon {
+  font-size: 30px;
+  font-family: var(--greek-font);
+  color: var(--azul-lt);
+  background: linear-gradient(160deg, #fff 0%, #f8f0e5 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 10px 28px rgba(56,44,29,0.12);
+}
+
+.header-title h1 {
+  font-size: 25px;
+  font-weight: 800;
+  color: var(--blanco);
+  letter-spacing: 0;
+}
+.header-title p {
+  font-size: 12.5px;
+  color: var(--gris);
+  margin-top: 3px;
+}
+
+/* ── Buscador ── */
+.search-wrap {
+  position: relative;
+  margin-top: 16px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gris);
+  font-size: 20px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#searchInput {
+  width: 100%;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--border2);
+  border-radius: 999px;
+  padding: 15px 96px 15px 48px;
+  font-size: 17px;
+  color: var(--blanco);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: var(--greek-font);
+}
+#searchInput:focus {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+#searchInput::placeholder { color: var(--gris); font-family: var(--ui-font); }
+
+.clear-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gris);
+  cursor: pointer;
+  font-size: 17px;
+  padding: 4px;
+  border-radius: 4px;
+  display: none;
+  line-height: 1;
+}
+.clear-btn:hover { color: var(--blanco); }
+.clear-btn.visible { display: flex; align-items: center; }
+
+.greek-key-btn {
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid var(--border2);
+  background: rgba(74,143,232,0.1);
+  color: var(--azul-lt);
+  cursor: pointer;
+  font: 700 12px var(--greek-font);
+  height: 34px;
+  min-width: 44px;
+  border-radius: 999px;
+  line-height: 1;
+}
+.greek-key-btn:hover { border-color: var(--azul); color: #fff; }
+.greek-key-btn.active {
+  background: var(--azul);
+  border-color: var(--azul);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(74,143,232,0.15);
+}
+
+/* ── Tabs de filtro ── */
+.tabs-wrap {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.tab {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--gris);
+  transition: all 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+.tab:hover { border-color: var(--border2); color: var(--blanco); }
+.tab.active { color: #fff; border-color: transparent; }
+
+.tab[data-cat="ALL"]  { border-color: var(--border2); }
+.tab[data-cat="ALL"].active  { background: linear-gradient(135deg, var(--azul), #6f8ef0); }
+.tab[data-cat="VB"].active   { background: linear-gradient(135deg, var(--verde), #7ce3b7); color: #052e16; }
+.tab[data-cat="MSN"].active  { background: linear-gradient(135deg, var(--azul), #85a5ff); }
+.tab[data-cat="FSN"].active  { background: linear-gradient(135deg, var(--morado), #c4b5fd); }
+.tab[data-cat="NSN"].active  { background: linear-gradient(135deg, var(--ambar), #ffd166); color: #1c1400; }
+.tab[data-cat="ADJ"].active  { background: linear-gradient(135deg, var(--teal), #7ee8df); color: #042f2e; }
+.tab[data-cat="PREP"].active { background: linear-gradient(135deg, #2dd4bf, #8cf5e6); color: #042f2e; }
+.tab[data-cat="PRON"].active { background: linear-gradient(135deg, var(--rosa), #ffb1d2); color: #4a0020; }
+.tab[data-cat="OTRO"].active { background: var(--gris); color: #111; }
+
+/* ── Stats bar ── */
+.stats-bar {
+  padding: 12px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--gris);
+}
+.stats-bar b { color: var(--azul-lt); }
+
+/* Modo selector */
+.mode-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.mode-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 11.5px;
+  cursor: pointer;
+  color: var(--gris);
+  transition: all 0.15s;
+}
+.mode-btn:hover { color: var(--blanco); }
+.mode-btn.active { background: var(--azul); border-color: var(--azul); color: #fff; }
+.theme-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface2);
+}
+.theme-toggle .mode-btn {
+  border: 0;
+  background: transparent;
+  padding: 4px 9px;
+}
+.theme-toggle .mode-btn.active {
+  background: var(--azul);
+  color: #fff;
+}
+
+/* ── Main layout ── */
+main {
+  flex: 1;
+  padding: 16px 16px 32px;
+  max-width: 1160px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Autocomplete dropdown ── */
+#autocomplete {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 200;
+  display: none;
+}
+#autocomplete.open { display: block; }
+
+.ac-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.ac-item:last-child { border-bottom: none; }
+.ac-item:hover, .ac-item.selected { background: var(--surface2); }
+
+.ac-greek {
+  font-family: var(--greek-font);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--azul-lt);
+  min-width: 110px;
+}
+.ac-translit {
+  font-size: 11px;
+  color: var(--gris);
+  font-style: italic;
+  min-width: 90px;
+}
+.ac-es {
+  font-size: 12px;
+  color: var(--texto);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ac-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+/* ── Lista de resultados ── */
+#resultsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.entry-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.entry-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 6px;
+}
+.entry-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.card-greek {
+  font-family: var(--greek-font);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--blanco);
+  line-height: 1.2;
+}
+
+.card-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.4px;
+}
+
+.card-translit {
+  font-size: 11px;
+  color: var(--gris);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.card-morpho {
+  font-size: 10.5px;
+  color: var(--gris);
+  margin-bottom: 5px;
+  font-family: var(--ui-font);
+}
+
+.card-meaning {
+  font-size: 14px;
+  color: var(--texto);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* colores por categoría */
+.cat-VB  .entry-card::before, .cat-VB  .card-badge { background: var(--verde); }
+.cat-VB  .card-badge { color: #052e16; }
+.cat-VB  .card-greek { color: #6ee7b7; }
+
+.cat-MSN .entry-card::before, .cat-MSN .card-badge { background: var(--azul); }
+.cat-MSN .card-badge { color: #fff; }
+.cat-MSN .card-greek { color: var(--azul-lt); }
+
+.cat-FSN .entry-card::before, .cat-FSN .card-badge { background: var(--morado); }
+.cat-FSN .card-badge { color: #fff; }
+.cat-FSN .card-greek { color: #c4b5fd; }
+
+.cat-NSN .entry-card::before, .cat-NSN .card-badge { background: var(--ambar); }
+.cat-NSN .card-badge { color: #1c1400; }
+.cat-NSN .card-greek { color: #fcd34d; }
+
+.cat-ADJ .entry-card::before, .cat-ADJ .card-badge { background: var(--teal); }
+.cat-ADJ .card-badge { color: #042f2e; }
+.cat-ADJ .card-greek { color: #5eead4; }
+
+.cat-PREP .entry-card::before, .cat-PREP .card-badge { background: var(--teal); }
+.cat-PREP .card-badge { color: #042f2e; }
+.cat-PREP .card-greek { color: #5eead4; }
+
+.cat-PRON .entry-card::before, .cat-PRON .card-badge { background: var(--rosa); }
+.cat-PRON .card-badge { color: #4a0020; }
+.cat-PRON .card-greek { color: #f9a8d4; }
+
+.cat-OTRO .entry-card::before, .cat-OTRO .card-badge { background: var(--gris); }
+.cat-OTRO .card-badge { color: #111; }
+
+/* ── Letras separadoras ── */
+.letra-sep {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 2px;
+}
+.letra-sep span {
+  font-family: var(--greek-font);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--azul);
+  background: rgba(74,143,232,0.1);
+  border: 1px solid rgba(74,143,232,0.2);
+  border-radius: 16px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.letra-sep hr {
+  flex: 1;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+.letra-sep small {
+  font-size: 10px;
+  color: var(--gris);
+  white-space: nowrap;
+}
+
+/* ── Modo tarjetas ── */
+#flashcard-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 40px;
+}
+#flashcard-wrap.active { display: flex; }
+#resultsList.hidden { display: none; }
+
+.fc-progress {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 16px;
+}
+.fc-bar-bg {
+  background: var(--surface2);
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.fc-bar {
+  background: linear-gradient(90deg, var(--azul), var(--verde));
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+.fc-label {
+  font-size: 11px;
+  color: var(--gris);
+  text-align: center;
+}
+
+.flashcard {
+  width: 100%;
+  max-width: 500px;
+  min-height: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 28px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow);
+  text-align: center;
+  perspective: 1000px;
+  position: relative;
+}
+.flashcard:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+
+.fc-front, .fc-back {
+  width: 100%;
+}
+.fc-back { display: none; }
+.flashcard.flipped .fc-front { display: none; }
+.flashcard.flipped .fc-back  { display: block; }
+
+.fc-greek {
+  font-family: var(--greek-font);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--blanco);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.fc-translit {
+  font-size: 15px;
+  color: var(--gris);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+.fc-hint {
+  font-size: 12px;
+  color: var(--border2);
+  margin-top: 16px;
+}
+.fc-meaning {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--verde);
+  margin-bottom: 10px;
+}
+.fc-cod { font-size: 12px; color: var(--gris); margin-bottom: 6px; }
+.fc-letra-badge {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--greek-font);
+  font-size: 12px;
+  color: var(--gris);
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+}
+
+.fc-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fc-btn {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 10px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--blanco);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fc-btn:hover { background: var(--surface2); }
+.fc-btn.primary { background: var(--azul); border-color: var(--azul); }
+.fc-btn.primary:hover { opacity: 0.85; }
+.fc-btn.success { background: var(--verde); border-color: var(--verde); color: #052e16; }
+.fc-btn.danger  { background: #dc2626; border-color: #dc2626; }
+
+.fc-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12px;
+}
+.fc-stat { text-align: center; }
+.fc-stat b { display: block; font-size: 18px; }
+.fc-stat.ok b { color: var(--verde); }
+.fc-stat.fail b { color: #f87171; }
+.fc-stat.pend b { color: var(--ambar); }
+
+/* ── Modal detalle ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  animation: slideUp 0.2s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-header {
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.modal-greek {
+  font-family: var(--greek-font);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.modal-close {
+  background: var(--surface2);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--gris);
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.modal-close:hover { color: var(--blanco); }
+
+.modal-body {
+  padding: 16px 20px 20px;
+}
+
+.modal-row {
+  display: flex;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.modal-row:last-child { border-bottom: none; }
+
+.modal-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--gris);
+  min-width: 90px;
+  padding-top: 1px;
+}
+.modal-value {
+  font-size: 13.5px;
+  color: var(--blanco);
+  flex: 1;
+  line-height: 1.5;
+}
+.modal-value.greek-val {
+  font-family: var(--greek-font);
+  font-size: 15px;
+  color: var(--azul-lt);
+}
+.modal-value.meaning-val {
+  font-weight: 600;
+  color: var(--verde);
+  font-size: 15px;
+}
+
+
+/* -- Panel potente -- */
+.power-panel {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px 16px;
+  display: grid;
+  gap: 10px;
+}
+.tool-row, .letter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tool-btn, .tool-select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  min-height: 42px;
+  color: var(--texto);
+  font: 600 12px var(--ui-font);
+}
+.tool-btn {
+  padding: 8px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tool-btn:hover, .tool-select:hover { border-color: var(--border2); color: var(--blanco); }
+.tool-btn.active { border-color: var(--azul); color: #fff; background: rgba(74,143,232,0.22); }
+.tool-btn.success.active { border-color: var(--verde); background: rgba(62,207,126,0.18); color: #8ff0bf; }
+.tool-select { padding: 6px 28px 6px 10px; outline: none; }
+.letter-chip {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--gris);
+  font: 700 14px var(--greek-font);
+  cursor: pointer;
+}
+.letter-chip:hover { color: var(--blanco); border-color: var(--border2); }
+.letter-chip.active { background: var(--azul); border-color: var(--azul); color: #fff; }
+.card-actions {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  display: flex;
+  gap: 6px;
+}
+.mini-action {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--gris);
+  border-radius: 999px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.mini-action.active { color: #fff; border-color: var(--azul); background: rgba(74,143,232,0.28); }
+.entry-card.known { opacity: 0.74; }
+.entry-card.known .card-greek::after {
+  content: ' aprendido';
+  font: 700 10px var(--ui-font);
+  color: var(--verde);
+  margin-left: 8px;
+}
+.score-note {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--gris);
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 20px 20px;
+}
+.modal-actions .tool-btn { flex: 1 1 130px; justify-content: center; }
+@media (max-width: 600px) {
+  .stats-bar { align-items: flex-start; gap: 8px; flex-direction: column; }
+  .header-top { align-items: flex-start; }
+  .power-panel { padding: 10px 16px; }
+  .tool-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tool-btn, .tool-select { width: 100%; justify-content: center; }
+  .letter-row { gap: 6px; }
+  .letter-chip { width: 28px; height: 28px; }
+  .card-actions { position: static; margin-top: 10px; }
+}
+
+/* ── Estado vacío ── */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gris);
+}
+.empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+.empty-state h3 { font-size: 16px; color: var(--texto); margin-bottom: 6px; }
+.empty-state p { font-size: 13px; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  header { padding: 14px 16px 12px; }
+  #resultsList { grid-template-columns: 1fr; }
+  .fc-greek { font-size: 32px; }
+  .modal-greek { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="logo-icon">α</div>
+    <div class="header-title">
+      <h1>Diccionario Griego Koiné</h1>
+      <p>636 lemas · NT · búsqueda en griego y español</p>
+    </div>
+  </div>
+  <div class="search-wrap" id="searchWrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput"
+           placeholder="Buscar en griego (ἀγάπη) o español (amor)..."
+           autocomplete="off" spellcheck="false" />
+    <button class="greek-key-btn" id="greekKeyBtn" type="button"
+            title="Activar escritura griega: escribe agape, logos, theos">αβ</button>
+    <button class="clear-btn" id="clearBtn" title="Limpiar">✕</button>
+    <div id="autocomplete"></div>
+  </div>
+  <div class="tabs-wrap" id="tabsWrap">
+    <button class="tab active" data-cat="ALL">Todos</button>
+    <button class="tab" data-cat="VB">VB Verbo</button>
+    <button class="tab" data-cat="MSN">MSN Masc.</button>
+    <button class="tab" data-cat="FSN">FSN Fem.</button>
+    <button class="tab" data-cat="NSN">NSN Neutro</button>
+    <button class="tab" data-cat="ADJ">ADJ Adjetivo</button>
+    <button class="tab" data-cat="PREP">PREP</button>
+    <button class="tab" data-cat="PRON">PRON</button>
+    <button class="tab" data-cat="OTRO">Otros</button>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <span id="statsText">Mostrando <b id="countShown">636</b> de 636 entradas</span>
+  <div class="mode-btns">
+    <div class="theme-toggle" aria-label="Tema visual">
+      <button class="mode-btn active" id="themeLight" type="button" onclick="setTheme('light')">Claro</button>
+      <button class="mode-btn" id="themeDark" type="button" onclick="setTheme('dark')">Oscuro</button>
+    </div>
+    <button class="mode-btn active" id="btnLista" onclick="setMode('lista')">≡ Lista</button>
+    <button class="mode-btn" id="btnFlash" onclick="setMode('flash')">⟳ Tarjetas</button>
+  </div>
+</div>
+
+<section class="power-panel" aria-label="Herramientas">
+  <div class="tool-row">
+    <select class="tool-select" id="sortSelect" title="Ordenar">
+      <option value="alpha">Orden alfabético</option>
+      <option value="category">Por categoría</option>
+      <option value="known">Aprendidas primero</option>
+      <option value="review">Repaso primero</option>
+      <option value="random">Aleatorio</option>
+    </select>
+    <button class="tool-btn" id="favToggle" title="Mostrar solo favoritas">☆ Favoritas</button>
+    <button class="tool-btn success" id="pendingToggle" title="Ocultar aprendidas">◌ Pendientes</button>
+    <button class="tool-btn" id="studyNowBtn" title="Estudiar resultados actuales">⟳ Estudiar</button>
+    <button class="tool-btn" id="exportBtn" title="Exportar progreso">⇩ Progreso</button>
+    <button class="tool-btn" id="resetBtn" title="Reiniciar progreso">↺ Reiniciar</button>
+  </div>
+  <div class="letter-row" id="letterRow" aria-label="Letras"></div>
+</section>
+
+<main>
+  <div id="resultsList"></div>
+  <div id="flashcard-wrap">
+    <div class="fc-progress">
+      <div class="fc-bar-bg"><div class="fc-bar" id="fcBar" style="width:0%"></div></div>
+      <div class="fc-label" id="fcLabel">Carta 1 de 0</div>
+    </div>
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="fc-letra-badge" id="fcLetra"></div>
+      <div class="fc-front">
+        <div class="fc-greek" id="fcGreek"></div>
+        <div class="fc-translit" id="fcTranslit"></div>
+        <div class="fc-cod" id="fcCod"></div>
+        <div class="fc-hint">toca para ver significado</div>
+      </div>
+      <div class="fc-back">
+        <div class="fc-meaning" id="fcMeaning"></div>
+        <div class="fc-cod" id="fcCodBack"></div>
+      </div>
+    </div>
+    <div class="fc-controls">
+      <button class="fc-btn danger" onclick="fcAnswer(false)">✗ No supe</button>
+      <button class="fc-btn primary" onclick="flipCard()">↻ Girar</button>
+      <button class="fc-btn success" onclick="fcAnswer(true)">✓ La supe</button>
+    </div>
+    <div class="fc-stats">
+      <div class="fc-stat ok"><b id="fcOk">0</b>aprendidas</div>
+      <div class="fc-stat fail"><b id="fcFail">0</b>repasar</div>
+      <div class="fc-stat pend"><b id="fcPend">0</b>pendientes</div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal detalle -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-greek" id="modalGreek"></div>
+        <div style="font-size:12px;color:var(--gris);font-style:italic;margin-top:3px" id="modalTranslit"></div>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="tool-btn" id="modalFavBtn" onclick="toggleFavorite(lastModalId)">☆ Favorita</button>
+      <button class="tool-btn success" id="modalKnownBtn" onclick="toggleKnown(lastModalId)">✓ Aprendida</button>
+      <button class="tool-btn" onclick="copyLemma(lastModalId)">⧉ Copiar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DICCIONARIO = [{"id":0,"gr":"Ἀβραάμ","tr":"Abraam","cod":"MSN - indecl.","es":"Abraham","letra":"Α"},{"id":1,"gr":"ἀγαθός","tr":"agathos","cod":"MSN","es":"bueno","letra":"Α"},{"id":2,"gr":"ἀγαπάω","tr":"agapaō","cod":"VB","es":"amo, quiero","letra":"Α"},{"id":3,"gr":"ἀγάπη","tr":"agapē","cod":"FSN - ης ἡ","es":"amor","letra":"Α"},{"id":4,"gr":"ἀγαπητός","tr":"agapētos","cod":"MSN","es":"amado, querido","letra":"Α"},{"id":5,"gr":"ἀγγέλλω","tr":"aggellō","cod":"VB","es":"anuncio","letra":"Α"},{"id":6,"gr":"ἄγγελος","tr":"aggelos","cod":"MSN - ου ὁ","es":"mensajero, ángel","letra":"Α"},{"id":7,"gr":"ἁγιάζω","tr":"hagiazō","cod":"VB","es":"santifico","letra":"Α"},{"id":8,"gr":"ἅγιος","tr":"hagios","cod":"MSN","es":"santo, sagrado","letra":"Α"},{"id":9,"gr":"ἀγοράζω","tr":"agorazō","cod":"VB","es":"compro","letra":"Α"},{"id":10,"gr":"ἀγρός","tr":"agros","cod":"MSN - οῦ ὁ","es":"campo","letra":"Α"},{"id":11,"gr":"ἄγω","tr":"agō","cod":"VB","es":"conduzco, llevo, dirijo","letra":"Α"},{"id":12,"gr":"ἀδελφή","tr":"adelphē","cod":"FSN - ῆς ἡ","es":"hermana","letra":"Α"},{"id":13,"gr":"ἀδελφός","tr":"adelphos","cod":"MSN - οῦ ὁ","es":"hermano","letra":"Α"},{"id":14,"gr":"ἀδικέω","tr":"adikeō","cod":"VB","es":"hago injusticia, obro mal","letra":"Α"},{"id":15,"gr":"ἀδικία","tr":"adikia","cod":"FSN - ας ἡ","es":"injusticia, iniquidad","letra":"Α"},{"id":16,"gr":"αἷμα","tr":"haima","cod":"NSN - ατος τό","es":"sangre","letra":"Α"},{"id":17,"gr":"αἴρω","tr":"airō","cod":"VB","es":"tomo, quito, levanto","letra":"Α"},{"id":18,"gr":"αἰτέω","tr":"aiteō","cod":"VB","es":"pido, solicito (+ac. pers. +ac. cosa)","letra":"Α"},{"id":19,"gr":"αἰών","tr":"aiōn","cod":"MSN - ῶνος ὁ","es":"tiempo largo, siglo, eternidad","letra":"Α"},{"id":20,"gr":"αἰώνιος","tr":"aiōnios","cod":"ADJ","es":"eterno","letra":"Α"},{"id":21,"gr":"ἀκάθαρτος","tr":"akathartos","cod":"ADJ","es":"impuro","letra":"Α"},{"id":22,"gr":"ἀκοή","tr":"akoē","cod":"FSN - ῆς ἡ","es":"fama, noticia, oído","letra":"Α"},{"id":23,"gr":"ἀκολουθέω","tr":"akoloutheō","cod":"VB","es":"sigo, acompaño (+dat.)","letra":"Α"},{"id":24,"gr":"ἀκούω","tr":"akouō","cod":"VB","es":"oigo, escucho (+ac. cosa, +gen. pers.)","letra":"Α"},{"id":25,"gr":"ἀλήθεια","tr":"alētheia","cod":"FSN - ας ἡ","es":"verdad","letra":"Α"},{"id":26,"gr":"ἀληθής","tr":"alēthēs","cod":"ADJ","es":"veraz, verdadero, genuino","letra":"Α"},{"id":27,"gr":"ἀληθινός","tr":"alēthinos","cod":"ADJ","es":"verdadero, genuino","letra":"Α"},{"id":28,"gr":"ἀληθῶς","tr":"alēthōs","cod":"ADV","es":"verdaderamente","letra":"Α"},{"id":29,"gr":"ἀλλά","tr":"alla","cod":"CONJ","es":"pero, sino","letra":"Α"},{"id":30,"gr":"ἀλλήλων","tr":"allēlōn","cod":"PRON - recípr.","es":"uno a otro, mutuamente","letra":"Α"},{"id":31,"gr":"ἄλλος","tr":"allos","cod":"PRON/ADJ","es":"otro (de la misma clase)","letra":"Α"},{"id":32,"gr":"ἁμαρτάνω","tr":"hamartanō","cod":"VB","es":"peco, hago algo malo","letra":"Α"},{"id":33,"gr":"ἁμαρτία","tr":"hamartia","cod":"FSN - ας ἡ","es":"pecado","letra":"Α"},{"id":34,"gr":"ἁμαρτωλός","tr":"hamartōlos","cod":"MSN - οῦ ὁ","es":"pecador","letra":"Α"},{"id":35,"gr":"ἀμήν","tr":"amēn","cod":"PART","es":"amén, en verdad","letra":"Α"},{"id":36,"gr":"ἀμπελών","tr":"ampelōn","cod":"MSN - ῶνος ὁ","es":"viña, viñedo","letra":"Α"},{"id":37,"gr":"ἄν","tr":"an","cod":"PART","es":"partícula condicional/modal","letra":"Α"},{"id":38,"gr":"ἀναβαίνω","tr":"anabainō","cod":"VB","es":"subo, asciendo","letra":"Α"},{"id":39,"gr":"ἀναβλέπω","tr":"anablepō","cod":"VB","es":"levanto la vista, recobro la vista","letra":"Α"},{"id":40,"gr":"ἀναγινώσκω","tr":"anaginōskō","cod":"VB","es":"leo","letra":"Α"},{"id":41,"gr":"ἀνάγω","tr":"anagō","cod":"VB","es":"conduzco, hago subir, restauro","letra":"Α"},{"id":42,"gr":"ἀναιρέω","tr":"anaireō","cod":"VB","es":"mato, quito, suprimo","letra":"Α"},{"id":43,"gr":"ἀνάστασις","tr":"anastasis","cod":"FSN - εως ἡ","es":"resurrección","letra":"Α"},{"id":44,"gr":"ἄνεμος","tr":"anemos","cod":"MSN - ου ὁ","es":"viento","letra":"Α"},{"id":45,"gr":"ἀνήρ","tr":"anēr","cod":"MSN - ανδρός ὁ","es":"varón, esposo, hombre","letra":"Α"},{"id":46,"gr":"ἄνθρωπος","tr":"anthrōpos","cod":"MSN - ου ὁ","es":"ser humano, persona, hombre","letra":"Α"},{"id":47,"gr":"ἀνίστημι","tr":"anistēmi","cod":"VB","es":"levanto, resucito, me levanto","letra":"Α"},{"id":48,"gr":"ἀνοίγω","tr":"anoigō","cod":"VB","es":"abro","letra":"Α"},{"id":49,"gr":"ἄξιος","tr":"axios","cod":"ADJ","es":"digno, merecedor","letra":"Α"},{"id":50,"gr":"ἀπαγγέλλω","tr":"apaggellō","cod":"VB","es":"informo, anuncio, reporto","letra":"Α"},{"id":51,"gr":"ἅπας","tr":"hapas","cod":"ADJ","es":"todo, entero, cada","letra":"Α"},{"id":52,"gr":"ἀπέρχομαι","tr":"aperchomai","cod":"VB","es":"me voy, me marcho","letra":"Α"},{"id":53,"gr":"ἄπιστος","tr":"apistos","cod":"ADJ","es":"incrédulo, infiel","letra":"Α"},{"id":54,"gr":"ἀπό","tr":"apo","cod":"PREP +gen.","es":"de, desde, procedente de, lejos de","letra":"Α"},{"id":55,"gr":"ἀποδίδωμι","tr":"apodidōmi","cod":"VB","es":"doy, devuelvo, pago, recompenso","letra":"Α"},{"id":56,"gr":"ἀποθνῄσκω","tr":"apothnēskō","cod":"VB","es":"muero","letra":"Α"},{"id":57,"gr":"ἀποκαλύπτω","tr":"apokaluptō","cod":"VB","es":"revelo, descubro","letra":"Α"},{"id":58,"gr":"ἀποκρίνομαι","tr":"apokrinomai","cod":"VB","es":"respondo, contesto","letra":"Α"},{"id":59,"gr":"ἀποκτείνω","tr":"apokteinō","cod":"VB","es":"mato","letra":"Α"},{"id":60,"gr":"ἀπόλλυμι","tr":"apollumi","cod":"VB","es":"destruyo, arruino (med.: perezco)","letra":"Α"},{"id":61,"gr":"ἀπολύω","tr":"apoluō","cod":"VB","es":"dejo libre, libero, despido, divorcio","letra":"Α"},{"id":62,"gr":"ἀποστέλλω","tr":"apostellō","cod":"VB","es":"envío, despacho","letra":"Α"},{"id":63,"gr":"ἀπόστολος","tr":"apostolos","cod":"MSN - ου ὁ","es":"apóstol, enviado","letra":"Α"},{"id":64,"gr":"ἅπτομαι","tr":"haptomai","cod":"VB","es":"toco (+gen.)","letra":"Α"},{"id":65,"gr":"ἄρα","tr":"ara","cod":"PART - pospos.","es":"por consiguiente, así pues","letra":"Α"},{"id":66,"gr":"ἀρνέομαι","tr":"arneomai","cod":"VB","es":"rehúso, niego","letra":"Α"},{"id":67,"gr":"ἀρνίον","tr":"arnion","cod":"NSN - ου τό","es":"cordero, oveja","letra":"Α"},{"id":68,"gr":"ἄρτι","tr":"arti","cod":"ADV","es":"ahora mismo, en este momento","letra":"Α"},{"id":69,"gr":"ἄρτος","tr":"artos","cod":"MSN - ου ὁ","es":"pan","letra":"Α"},{"id":70,"gr":"ἀρχή","tr":"archē","cod":"FSN - ῆς ἡ","es":"principio, comienzo, autoridad","letra":"Α"},{"id":71,"gr":"ἀρχιερεύς","tr":"archiereus","cod":"MSN - έως ὁ","es":"sumo sacerdote, sacerdote principal","letra":"Α"},{"id":72,"gr":"ἄρχομαι","tr":"archomai","cod":"VB","es":"comienzo","letra":"Α"},{"id":73,"gr":"ἄρχων","tr":"archōn","cod":"MSN - οντος ὁ","es":"jefe, gobernante, príncipe","letra":"Α"},{"id":74,"gr":"ἀσθένεια","tr":"astheneia","cod":"FSN - ας ἡ","es":"debilidad, enfermedad","letra":"Α"},{"id":75,"gr":"ἀσθενέω","tr":"astheneō","cod":"VB","es":"estoy enfermo, soy débil","letra":"Α"},{"id":76,"gr":"ἀσθενής","tr":"asthenēs","cod":"ADJ","es":"débil, enfermo","letra":"Α"},{"id":77,"gr":"ἀσπάζομαι","tr":"aspazomai","cod":"VB","es":"saludo, abrazo","letra":"Α"},{"id":78,"gr":"ἀστήρ","tr":"astēr","cod":"MSN - έρος ὁ","es":"estrella","letra":"Α"},{"id":79,"gr":"αὐξάνω","tr":"auxanō","cod":"VB","es":"crezco, aumento","letra":"Α"},{"id":80,"gr":"αὐτός","tr":"autos","cod":"PRON - ή, ό","es":"él, ella, ello; mismo; él mismo","letra":"Α"},{"id":81,"gr":"ἀφίημι","tr":"aphiēmi","cod":"VB","es":"abandono, perdono, permito, despido","letra":"Α"},{"id":82,"gr":"ἄχρι","tr":"achri","cod":"PREP +gen.","es":"hasta","letra":"Α"},{"id":83,"gr":"Βαρνάβας","tr":"Barnabas","cod":"MSN - indecl.","es":"Bernabé","letra":"Β"},{"id":84,"gr":"βάλλω","tr":"ballō","cod":"VB","es":"echo, arrojo, lanzo","letra":"Β"},{"id":85,"gr":"βαπτίζω","tr":"baptizō","cod":"VB","es":"bautizo, lavo, sumerjo","letra":"Β"},{"id":86,"gr":"βασιλεία","tr":"basileia","cod":"FSN - ας ἡ","es":"reino, reinado, imperio","letra":"Β"},{"id":87,"gr":"βασιλεύς","tr":"basileus","cod":"MSN - έως ὁ","es":"rey","letra":"Β"},{"id":88,"gr":"βαστάζω","tr":"bastazō","cod":"VB","es":"llevo, cargo, soporto","letra":"Β"},{"id":89,"gr":"βιβλίον","tr":"biblion","cod":"NSN - ου τό","es":"libro, rollo escrito","letra":"Β"},{"id":90,"gr":"βλασφημέω","tr":"blasphēmeō","cod":"VB","es":"blasfemo, injurio, calumnio","letra":"Β"},{"id":91,"gr":"βλέπω","tr":"blepō","cod":"VB","es":"veo, miro, observo","letra":"Β"},{"id":92,"gr":"βούλομαι","tr":"boulomai","cod":"VB","es":"quiero, deseo, tengo intención de","letra":"Β"},{"id":93,"gr":"Γαλιλαία","tr":"Galilaia","cod":"FSN - ας ἡ","es":"Galilea","letra":"Γ"},{"id":94,"gr":"γαμέω","tr":"gameō","cod":"VB","es":"me caso, me caso con (+ac.)","letra":"Γ"},{"id":95,"gr":"γάρ","tr":"gar","cod":"CONJ - pospos.","es":"pues, porque, en efecto","letra":"Γ"},{"id":96,"gr":"γε","tr":"ge","cod":"PART","es":"por cierto, al menos (énfasis)","letra":"Γ"},{"id":97,"gr":"γενεά","tr":"genea","cod":"FSN - ᾶς ἡ","es":"familia, generación, raza","letra":"Γ"},{"id":98,"gr":"γεννάω","tr":"gennaō","cod":"VB","es":"engendro (pas.: nazco)","letra":"Γ"},{"id":99,"gr":"γῆ","tr":"gē","cod":"FSN - ῆς ἡ","es":"tierra, terreno, suelo, región","letra":"Γ"},{"id":100,"gr":"γίνομαι","tr":"ginomai","cod":"VB","es":"llego a ser, ocurro, acontezco","letra":"Γ"},{"id":101,"gr":"γινώσκω","tr":"ginōskō","cod":"VB","es":"conozco, sé, entiendo","letra":"Γ"},{"id":102,"gr":"γλῶσσα","tr":"glōssa","cod":"FSN - ης ἡ","es":"lengua, idioma","letra":"Γ"},{"id":103,"gr":"γνωρίζω","tr":"gnōrizō","cod":"VB","es":"doy a conocer, comunico","letra":"Γ"},{"id":104,"gr":"γνῶσις","tr":"gnōsis","cod":"FSN - εως ἡ","es":"conocimiento","letra":"Γ"},{"id":105,"gr":"γραμματεύς","tr":"grammateus","cod":"MSN - έως ὁ","es":"escriba, letrado","letra":"Γ"},{"id":106,"gr":"γραφή","tr":"graphē","cod":"FSN - ῆς ἡ","es":"escritura, Escritura sagrada","letra":"Γ"},{"id":107,"gr":"γράφω","tr":"graphō","cod":"VB","es":"escribo","letra":"Γ"},{"id":108,"gr":"γυνή","tr":"gunē","cod":"FSN - αικός ἡ","es":"mujer, esposa","letra":"Γ"},{"id":109,"gr":"Δαυίδ","tr":"Dauid","cod":"MSN - indecl.","es":"David","letra":"Δ"},{"id":110,"gr":"δαιμόνιον","tr":"daimonion","cod":"NSN - ου τό","es":"demonio, espíritu maligno","letra":"Δ"},{"id":111,"gr":"δέ","tr":"de","cod":"CONJ - pospos.","es":"pero, y, ahora bien","letra":"Δ"},{"id":112,"gr":"δεῖ","tr":"dei","cod":"VB - impers.","es":"es necesario, se debe (+inf.)","letra":"Δ"},{"id":113,"gr":"δείκνυμι","tr":"deiknumi","cod":"VB","es":"muestro, señalo, indico","letra":"Δ"},{"id":114,"gr":"δέκα","tr":"deka","cod":"NUM","es":"diez","letra":"Δ"},{"id":115,"gr":"δένδρον","tr":"dendron","cod":"NSN - ου τό","es":"árbol","letra":"Δ"},{"id":116,"gr":"δεξιός","tr":"dexios","cod":"ADJ","es":"derecho, a mano derecha","letra":"Δ"},{"id":117,"gr":"δεύτερος","tr":"deuteros","cod":"ADJ/NUM","es":"segundo","letra":"Δ"},{"id":118,"gr":"δέχομαι","tr":"dechomai","cod":"VB","es":"recibo, acepto, doy la bienvenida","letra":"Δ"},{"id":119,"gr":"δέω","tr":"deō","cod":"VB","es":"ato, amarro, encadeno","letra":"Δ"},{"id":120,"gr":"διά","tr":"dia","cod":"PREP +gen./ac.","es":"gen.: a través de, por medio de / ac.: por causa de","letra":"Δ"},{"id":121,"gr":"διάβολος","tr":"diabolos","cod":"MSN - ου ὁ","es":"el calumniador, el diablo, Satanás","letra":"Δ"},{"id":122,"gr":"διαθήκη","tr":"diathēkē","cod":"FSN - ης ἡ","es":"alianza, pacto, testamento","letra":"Δ"},{"id":123,"gr":"διακονέω","tr":"diakoneō","cod":"VB","es":"sirvo, ministro, atiendo","letra":"Δ"},{"id":124,"gr":"διακονία","tr":"diakonia","cod":"FSN - ας ἡ","es":"servicio, ministerio, diaconado","letra":"Δ"},{"id":125,"gr":"διάκονος","tr":"diakonos","cod":"MSN - ου ὁ","es":"servidor, diácono, ministro","letra":"Δ"},{"id":126,"gr":"διαλογίζομαι","tr":"dialogizomai","cod":"VB","es":"considero, reflexiono, razono","letra":"Δ"},{"id":127,"gr":"διδάσκαλος","tr":"didaskalos","cod":"MSN - ου ὁ","es":"maestro, instructor","letra":"Δ"},{"id":128,"gr":"διδάσκω","tr":"didaskō","cod":"VB","es":"enseño, instruyo","letra":"Δ"},{"id":129,"gr":"διδαχή","tr":"didachē","cod":"FSN - ῆς ἡ","es":"enseñanza, instrucción, doctrina","letra":"Δ"},{"id":130,"gr":"δίδωμι","tr":"didōmi","cod":"VB","es":"doy, concedo, entrego","letra":"Δ"},{"id":131,"gr":"διέρχομαι","tr":"dierchomai","cod":"VB","es":"atravieso, paso por, recorro","letra":"Δ"},{"id":132,"gr":"δίκαιος","tr":"dikaios","cod":"ADJ","es":"justo, recto","letra":"Δ"},{"id":133,"gr":"δικαιοσύνη","tr":"dikaiosunē","cod":"FSN - ης ἡ","es":"justicia, rectitud","letra":"Δ"},{"id":134,"gr":"δικαιόω","tr":"dikaioō","cod":"VB","es":"justifico, declaro justo","letra":"Δ"},{"id":135,"gr":"διό","tr":"dio","cod":"CONJ","es":"por eso, por lo cual","letra":"Δ"},{"id":136,"gr":"διότι","tr":"dioti","cod":"CONJ","es":"porque, ya que, por cuanto","letra":"Δ"},{"id":137,"gr":"διψάω","tr":"dipsaō","cod":"VB","es":"tengo sed (de)","letra":"Δ"},{"id":138,"gr":"διώκω","tr":"diōkō","cod":"VB","es":"persigo, persecuto, procuro","letra":"Δ"},{"id":139,"gr":"δοκέω","tr":"dokeō","cod":"VB","es":"pienso, parezco, opino","letra":"Δ"},{"id":140,"gr":"δόξα","tr":"doxa","cod":"FSN - ης ἡ","es":"esplendor, gloria, honor","letra":"Δ"},{"id":141,"gr":"δοξάζω","tr":"doxazō","cod":"VB","es":"glorifico, alabo, honro","letra":"Δ"},{"id":142,"gr":"δουλεύω","tr":"douleuō","cod":"VB","es":"sirvo como esclavo, sirvo a (+dat.)","letra":"Δ"},{"id":143,"gr":"δοῦλος","tr":"doulos","cod":"MSN - ου ὁ","es":"esclavo, siervo","letra":"Δ"},{"id":144,"gr":"δύναμαι","tr":"dunamai","cod":"VB","es":"puedo, soy capaz de (+inf.)","letra":"Δ"},{"id":145,"gr":"δύναμις","tr":"dunamis","cod":"FSN - εως ἡ","es":"poder, fuerza, milagro","letra":"Δ"},{"id":146,"gr":"δυνατός","tr":"dunatos","cod":"ADJ","es":"poderoso, capaz, posible","letra":"Δ"},{"id":147,"gr":"δύο","tr":"duo","cod":"NUM","es":"dos","letra":"Δ"},{"id":148,"gr":"δώδεκα","tr":"dōdeka","cod":"NUM","es":"doce","letra":"Δ"},{"id":149,"gr":"Ἕλλην","tr":"Hellēn","cod":"MSN - ηνος ὁ","es":"griego, gentil de cultura griega","letra":"Ε"},{"id":150,"gr":"ἐάν","tr":"ean","cod":"CONJ","es":"si (condicional + subj.)","letra":"Ε"},{"id":151,"gr":"ἑαυτόν","tr":"heauton","cod":"PRON - refl.","es":"a sí mismo, uno mismo","letra":"Ε"},{"id":152,"gr":"ἐγγίζω","tr":"eggizō","cod":"VB","es":"me acerco, me aproximo (+dat.)","letra":"Ε"},{"id":153,"gr":"ἐγγύς","tr":"eggus","cod":"ADV/PREP","es":"cerca, próximo (+gen.)","letra":"Ε"},{"id":154,"gr":"ἐγείρω","tr":"egeirō","cod":"VB","es":"levanto, despierto, resucito","letra":"Ε"},{"id":155,"gr":"ἐγώ","tr":"egō","cod":"PRON - 1ª pers.","es":"yo","letra":"Ε"},{"id":156,"gr":"ἔθνος","tr":"ethnos","cod":"NSN - ους τό","es":"nación (pl.: gentiles, paganos)","letra":"Ε"},{"id":157,"gr":"εἰ","tr":"ei","cod":"CONJ","es":"si (condicional indicativo)","letra":"Ε"},{"id":158,"gr":"εἰκών","tr":"eikōn","cod":"FSN - όνος ἡ","es":"imagen, retrato, figura","letra":"Ε"},{"id":159,"gr":"εἰμί","tr":"eimi","cod":"VB - irreg.","es":"soy, estoy, existo","letra":"Ε"},{"id":160,"gr":"εἰρήνη","tr":"eirēnē","cod":"FSN - ης ἡ","es":"paz, tranquilidad","letra":"Ε"},{"id":161,"gr":"εἰς","tr":"eis","cod":"PREP +ac.","es":"a, hacia, en (dirección), para","letra":"Ε"},{"id":162,"gr":"εἰσέρχομαι","tr":"eiserchomai","cod":"VB","es":"entro, vengo dentro (+εἰς/ἐν)","letra":"Ε"},{"id":163,"gr":"εἴτε","tr":"eite","cod":"CONJ","es":"si, bien sea","letra":"Ε"},{"id":164,"gr":"ἐκ / ἐξ","tr":"ek / ex","cod":"PREP +gen.","es":"de, desde, fuera de (ἐξ ante vocal)","letra":"Ε"},{"id":165,"gr":"ἕκαστος","tr":"hekastos","cod":"PRON/ADJ","es":"cada uno, cada","letra":"Ε"},{"id":166,"gr":"ἑκατόν","tr":"hekaton","cod":"NUM","es":"cien, ciento","letra":"Ε"},{"id":167,"gr":"ἐκβάλλω","tr":"ekballō","cod":"VB","es":"expulso, echo fuera, hago salir","letra":"Ε"},{"id":168,"gr":"ἐκεῖ","tr":"ekei","cod":"ADV","es":"allí, allá","letra":"Ε"},{"id":169,"gr":"ἐκεῖθεν","tr":"ekeithen","cod":"ADV","es":"de allí, desde allí","letra":"Ε"},{"id":170,"gr":"ἐκεῖνος","tr":"ekeinos","cod":"PRON/DEM","es":"aquel, ese, aquél","letra":"Ε"},{"id":171,"gr":"ἐκκλησία","tr":"ekklēsia","cod":"FSN - ας ἡ","es":"asamblea, congregación, iglesia","letra":"Ε"},{"id":172,"gr":"ἐκπορεύομαι","tr":"ekporeuomai","cod":"VB","es":"salgo, procedo","letra":"Ε"},{"id":173,"gr":"ἐκχέω","tr":"ekcheō","cod":"VB","es":"derramo, vierto","letra":"Ε"},{"id":174,"gr":"ἐλάχιστος","tr":"elachistos","cod":"ADJ - superl.","es":"el más pequeño, mínimo","letra":"Ε"},{"id":175,"gr":"ἐλεέω","tr":"eleeō","cod":"VB","es":"soy misericordioso, tengo compasión de","letra":"Ε"},{"id":176,"gr":"ἔλεος","tr":"eleos","cod":"NSN - ους τό","es":"misericordia, compasión","letra":"Ε"},{"id":177,"gr":"ἐλεύθερος","tr":"eleutheros","cod":"ADJ","es":"libre","letra":"Ε"},{"id":178,"gr":"ἐλπίζω","tr":"elpizō","cod":"VB","es":"espero, tengo esperanza","letra":"Ε"},{"id":179,"gr":"ἐλπίς","tr":"elpis","cod":"FSN - ίδος ἡ","es":"esperanza","letra":"Ε"},{"id":180,"gr":"ἐμαυτόν","tr":"emauton","cod":"PRON - refl.","es":"a mí mismo","letra":"Ε"},{"id":181,"gr":"ἐμός","tr":"emos","cod":"ADJ - poses.","es":"mi, mío","letra":"Ε"},{"id":182,"gr":"ἔμπροσθεν","tr":"emprosthen","cod":"PREP/ADV +gen.","es":"delante de, en presencia de","letra":"Ε"},{"id":183,"gr":"ἐν","tr":"en","cod":"PREP +dat.","es":"en, dentro de, entre, con, por","letra":"Ε"},{"id":184,"gr":"ἐνδύω","tr":"enduō","cod":"VB","es":"(me) visto, me pongo (ropa)","letra":"Ε"},{"id":185,"gr":"ἕνεκα","tr":"heneka","cod":"PREP +gen.","es":"a causa de, por razón de","letra":"Ε"},{"id":186,"gr":"ἐννέα","tr":"ennea","cod":"NUM","es":"nueve","letra":"Ε"},{"id":187,"gr":"ἐντολή","tr":"entolē","cod":"FSN - ῆς ἡ","es":"mandamiento, precepto","letra":"Ε"},{"id":188,"gr":"ἐνώπιον","tr":"enōpion","cod":"PREP +gen.","es":"delante de, en presencia de","letra":"Ε"},{"id":189,"gr":"ἕξ","tr":"hex","cod":"NUM","es":"seis","letra":"Ε"},{"id":190,"gr":"ἐξέρχομαι","tr":"exerchomai","cod":"VB","es":"salgo, me voy","letra":"Ε"},{"id":191,"gr":"ἔξεστιν","tr":"exestin","cod":"VB - impers.","es":"está permitido, es lícito (+inf.)","letra":"Ε"},{"id":192,"gr":"ἐξουσία","tr":"exousia","cod":"FSN - ας ἡ","es":"autoridad, poder, derecho","letra":"Ε"},{"id":193,"gr":"ἔξω","tr":"exō","cod":"ADV/PREP +gen.","es":"fuera, afuera, fuera de","letra":"Ε"},{"id":194,"gr":"ἑορτή","tr":"heortē","cod":"FSN - ῆς ἡ","es":"fiesta, festival","letra":"Ε"},{"id":195,"gr":"ἐπαγγελία","tr":"epaggelia","cod":"FSN - ας ἡ","es":"promesa","letra":"Ε"},{"id":196,"gr":"ἐπεί","tr":"epei","cod":"CONJ","es":"puesto que, ya que, cuando","letra":"Ε"},{"id":197,"gr":"ἐπερωτάω","tr":"eperōtaō","cod":"VB","es":"pregunto, pido (+ac. pers. +ac. cosa)","letra":"Ε"},{"id":198,"gr":"ἐπί","tr":"epi","cod":"PREP +gen./dat./ac.","es":"gen.: sobre, en tiempo de / dat.: sobre, a base de / ac.: hacia, contra","letra":"Ε"},{"id":199,"gr":"ἐπιγινώσκω","tr":"epiginōskō","cod":"VB","es":"reconozco, comprendo, percibo","letra":"Ε"},{"id":200,"gr":"ἐπιθυμία","tr":"epithumia","cod":"FSN - ας ἡ","es":"deseo, anhelo, codicia","letra":"Ε"},{"id":201,"gr":"ἐπικαλέω","tr":"epikaleō","cod":"VB","es":"invoco, apelo, nombro (med.: me llamo)","letra":"Ε"},{"id":202,"gr":"ἐπιστολή","tr":"epistolē","cod":"FSN - ῆς ἡ","es":"carta, epístola","letra":"Ε"},{"id":203,"gr":"ἐπιστρέφω","tr":"epistrephō","cod":"VB","es":"vuelvo (atrás), me convierto","letra":"Ε"},{"id":204,"gr":"ἐπιτίθημι","tr":"epitithēmi","cod":"VB","es":"pongo sobre, impongo","letra":"Ε"},{"id":205,"gr":"ἐπιτιμάω","tr":"epitimaō","cod":"VB","es":"reprendo, amonestad, recrimino","letra":"Ε"},{"id":206,"gr":"ἑπτά","tr":"hepta","cod":"NUM","es":"siete","letra":"Ε"},{"id":207,"gr":"ἐργάζομαι","tr":"ergazomai","cod":"VB","es":"trabajo, obro, realizo","letra":"Ε"},{"id":208,"gr":"ἔργον","tr":"ergon","cod":"NSN - ου τό","es":"obra, acción, trabajo","letra":"Ε"},{"id":209,"gr":"ἔρημος","tr":"erēmos","cod":"FSN - ου ἡ","es":"desierto, lugar solitario","letra":"Ε"},{"id":210,"gr":"ἔρχομαι","tr":"erchomai","cod":"VB","es":"vengo, voy","letra":"Ε"},{"id":211,"gr":"ἐρωτάω","tr":"erōtaō","cod":"VB","es":"pido, pregunto (+ac. pers. +ac. cosa)","letra":"Ε"},{"id":212,"gr":"ἐσθίω","tr":"esthiō","cod":"VB","es":"como, me alimento","letra":"Ε"},{"id":213,"gr":"ἔσχατος","tr":"eschatos","cod":"ADJ - superl.","es":"último, postrero, el más insignificante","letra":"Ε"},{"id":214,"gr":"ἕτερος","tr":"heteros","cod":"ADJ/PRON","es":"otro, diferente (de distinta clase)","letra":"Ε"},{"id":215,"gr":"ἔτι","tr":"eti","cod":"ADV","es":"aún, todavía, además","letra":"Ε"},{"id":216,"gr":"ἑτοιμάζω","tr":"hetoimazō","cod":"VB","es":"preparo, dispongo","letra":"Ε"},{"id":217,"gr":"ἔτος","tr":"etos","cod":"NSN - ους τό","es":"año","letra":"Ε"},{"id":218,"gr":"εὐαγγελίζομαι","tr":"euaggelizomai","cod":"VB","es":"anuncio buenas noticias, evangelizo","letra":"Ε"},{"id":219,"gr":"εὐαγγέλιον","tr":"euaggelion","cod":"NSN - ου τό","es":"buena noticia, evangelio","letra":"Ε"},{"id":220,"gr":"εὐθύς","tr":"euthus","cod":"ADV","es":"en seguida, inmediatamente","letra":"Ε"},{"id":221,"gr":"εὐλογέω","tr":"eulogeō","cod":"VB","es":"bendigo, alabo, hablo bien de","letra":"Ε"},{"id":222,"gr":"εὑρίσκω","tr":"heuriskō","cod":"VB","es":"encuentro, hallo","letra":"Ε"},{"id":223,"gr":"εὐχαριστέω","tr":"eucharisteō","cod":"VB","es":"doy gracias, agradezco (+dat.)","letra":"Ε"},{"id":224,"gr":"ἐχθρός","tr":"echthros","cod":"MSN - οῦ ὁ","es":"enemigo, adversario","letra":"Ε"},{"id":225,"gr":"ἔχω","tr":"echō","cod":"VB","es":"tengo, poseo, llevo","letra":"Ε"},{"id":226,"gr":"ἕως","tr":"heōs","cod":"PREP/CONJ +gen.","es":"hasta, mientras","letra":"Ε"},{"id":227,"gr":"ζάω","tr":"zaō","cod":"VB","es":"vivo, estoy vivo","letra":"Ζ"},{"id":228,"gr":"ζητέω","tr":"zēteō","cod":"VB","es":"busco, intento, procuro","letra":"Ζ"},{"id":229,"gr":"ζωή","tr":"zōē","cod":"FSN - ῆς ἡ","es":"vida","letra":"Ζ"},{"id":230,"gr":"ζῷον","tr":"zōon","cod":"NSN - ου τό","es":"ser viviente, animal","letra":"Ζ"},{"id":231,"gr":"Ἠλίας","tr":"Ēlias","cod":"MSN - indecl.","es":"Elías","letra":"Η"},{"id":232,"gr":"Ἡρῴδης","tr":"Hērōdēs","cod":"MSN - ου ὁ","es":"Herodes","letra":"Η"},{"id":233,"gr":"ἤ","tr":"ē","cod":"CONJ","es":"o, que (comparativo)","letra":"Η"},{"id":234,"gr":"ἡγέομαι","tr":"hēgeomai","cod":"VB","es":"gobierno, dirijo, pienso, considero","letra":"Η"},{"id":235,"gr":"ἤδη","tr":"ēdē","cod":"ADV","es":"ya, en este momento","letra":"Η"},{"id":236,"gr":"ἥκω","tr":"hēkō","cod":"VB","es":"he venido, estoy presente","letra":"Η"},{"id":237,"gr":"ἥλιος","tr":"hēlios","cod":"MSN - ου ὁ","es":"sol","letra":"Η"},{"id":238,"gr":"ἡμεῖς","tr":"hēmeis","cod":"PRON - 1ª pl.","es":"nosotros, nosotras","letra":"Η"},{"id":239,"gr":"ἡμέρα","tr":"hēmera","cod":"FSN - ας ἡ","es":"día","letra":"Η"},{"id":240,"gr":"θάλασσα","tr":"thalassa","cod":"FSN - ης ἡ","es":"mar, lago","letra":"Θ"},{"id":241,"gr":"θάνατος","tr":"thanatos","cod":"MSN - ου ὁ","es":"muerte","letra":"Θ"},{"id":242,"gr":"θαυμάζω","tr":"thaumazō","cod":"VB","es":"me asombro, me maravillo","letra":"Θ"},{"id":243,"gr":"θεάομαι","tr":"theaomai","cod":"VB","es":"veo, miro, contemplo","letra":"Θ"},{"id":244,"gr":"θέλημα","tr":"thelēma","cod":"NSN - ατος τό","es":"voluntad, deseo","letra":"Θ"},{"id":245,"gr":"θέλω","tr":"thelō","cod":"VB","es":"deseo, quiero, estoy dispuesto","letra":"Θ"},{"id":246,"gr":"θεός","tr":"theos","cod":"MSN - οῦ ὁ","es":"Dios, dios","letra":"Θ"},{"id":247,"gr":"θεραπεύω","tr":"therapeuō","cod":"VB","es":"sano, curo, cuido","letra":"Θ"},{"id":248,"gr":"θεωρέω","tr":"theōreō","cod":"VB","es":"miro, observo, contemplo","letra":"Θ"},{"id":249,"gr":"θηρίον","tr":"thērion","cod":"NSN - ου τό","es":"animal (salvaje), fiera, bestia","letra":"Θ"},{"id":250,"gr":"θλῖψις","tr":"thlipsis","cod":"FSN - εως ἡ","es":"sufrimiento, aflicción, tribulación","letra":"Θ"},{"id":251,"gr":"θρόνος","tr":"thronos","cod":"MSN - ου ὁ","es":"trono","letra":"Θ"},{"id":252,"gr":"θυγάτηρ","tr":"thugatēr","cod":"FSN - τρός ἡ","es":"hija","letra":"Θ"},{"id":253,"gr":"θύρα","tr":"thura","cod":"FSN - ας ἡ","es":"puerta","letra":"Θ"},{"id":254,"gr":"θυσία","tr":"thusia","cod":"FSN - ας ἡ","es":"ofrenda, sacrificio","letra":"Θ"},{"id":255,"gr":"θυσιαστήριον","tr":"thusiastērion","cod":"NSN - ου τό","es":"altar","letra":"Θ"},{"id":256,"gr":"Ἰακώβ","tr":"Iakōb","cod":"MSN - indecl.","es":"Jacob","letra":"Ι"},{"id":257,"gr":"Ἰάκωβος","tr":"Iakōbos","cod":"MSN - ου ὁ","es":"Jacobo, Santiago","letra":"Ι"},{"id":258,"gr":"Ἱεροσόλυμα","tr":"Ierosoluma","cod":"NSN/FSN - pl.","es":"Jerusalén (forma griega)","letra":"Ι"},{"id":259,"gr":"Ἰερουσαλήμ","tr":"Ierousalēm","cod":"FSN - indecl.","es":"Jerusalén (forma semítica)","letra":"Ι"},{"id":260,"gr":"Ἰησοῦς","tr":"Iēsous","cod":"MSN - οῦ ὁ","es":"Jesús","letra":"Ι"},{"id":261,"gr":"Ἰουδαία","tr":"Ioudaia","cod":"FSN - ας ἡ","es":"Judea","letra":"Ι"},{"id":262,"gr":"Ἰουδαῖος","tr":"Ioudaios","cod":"MSN/ADJ","es":"judío, de Judea","letra":"Ι"},{"id":263,"gr":"Ἰούδας","tr":"Ioudas","cod":"MSN - α ὁ","es":"Judas, Judá","letra":"Ι"},{"id":264,"gr":"Ἰσραήλ","tr":"Israēl","cod":"MSN - indecl.","es":"Israel","letra":"Ι"},{"id":265,"gr":"Ἰωάννης","tr":"Iōannēs","cod":"MSN - ου ὁ","es":"Juan","letra":"Ι"},{"id":266,"gr":"Ἰωσήφ","tr":"Iōsēph","cod":"MSN - indecl.","es":"José","letra":"Ι"},{"id":267,"gr":"ἰάομαι","tr":"iaomai","cod":"VB","es":"sano, curo","letra":"Ι"},{"id":268,"gr":"ἴδιος","tr":"idios","cod":"ADJ","es":"propio, suyo propio, personal","letra":"Ι"},{"id":269,"gr":"ἰδού","tr":"idou","cod":"PART","es":"¡Mira!, ¡He aquí!, ¡Fíjate!","letra":"Ι"},{"id":270,"gr":"ἱερεύς","tr":"hiereus","cod":"MSN - έως ὁ","es":"sacerdote","letra":"Ι"},{"id":271,"gr":"ἱερόν","tr":"hieron","cod":"NSN - οῦ τό","es":"templo, recinto sagrado","letra":"Ι"},{"id":272,"gr":"ἱκανός","tr":"hikanos","cod":"ADJ","es":"suficiente, capaz, digno","letra":"Ι"},{"id":273,"gr":"ἱμάτιον","tr":"himation","cod":"NSN - ου τό","es":"vestido, prenda de ropa, manto","letra":"Ι"},{"id":274,"gr":"ἵνα","tr":"hina","cod":"CONJ","es":"para que, a fin de que (+subj.)","letra":"Ι"},{"id":275,"gr":"ἵστημι","tr":"histēmi","cod":"VB","es":"coloco en pie, sostengo (med.: me detengo)","letra":"Ι"},{"id":276,"gr":"ἰσχυρός","tr":"ischuros","cod":"ADJ","es":"fuerte, poderoso","letra":"Ι"},{"id":277,"gr":"ἰσχύω","tr":"ischuō","cod":"VB","es":"soy fuerte, puedo, valgo","letra":"Ι"},{"id":278,"gr":"ἰχθύς","tr":"ichthus","cod":"MSN - ύος ὁ","es":"pez, pescado","letra":"Ι"},{"id":279,"gr":"Καῖσαρ","tr":"Kaisar","cod":"MSN - αρος ὁ","es":"César, emperador","letra":"Κ"},{"id":280,"gr":"κἀγώ","tr":"kagō","cod":"PRON - crasis","es":"y yo, también yo","letra":"Κ"},{"id":281,"gr":"καθαρίζω","tr":"katharizō","cod":"VB","es":"purifico, declaro puro, limpio","letra":"Κ"},{"id":282,"gr":"καθαρός","tr":"katharos","cod":"ADJ","es":"limpio, puro","letra":"Κ"},{"id":283,"gr":"καθεύδω","tr":"katheudō","cod":"VB","es":"duermo","letra":"Κ"},{"id":284,"gr":"κάθημαι","tr":"kathēmai","cod":"VB","es":"estoy sentado, me siento","letra":"Κ"},{"id":285,"gr":"καθίζω","tr":"kathizō","cod":"VB","es":"hago sentar, me siento, habito","letra":"Κ"},{"id":286,"gr":"καθώς","tr":"kathōs","cod":"ADV/CONJ","es":"tal como, según, conforme a","letra":"Κ"},{"id":287,"gr":"καί","tr":"kai","cod":"CONJ","es":"y, también, incluso, hasta","letra":"Κ"},{"id":288,"gr":"καινός","tr":"kainos","cod":"ADJ","es":"nuevo, fresco, desconocido","letra":"Κ"},{"id":289,"gr":"καιρός","tr":"kairos","cod":"MSN - οῦ ὁ","es":"tiempo oportuno, momento, ocasión, estación","letra":"Κ"},{"id":290,"gr":"κακός","tr":"kakos","cod":"ADJ","es":"malo, malvado, dañino","letra":"Κ"},{"id":291,"gr":"καλέω","tr":"kaleō","cod":"VB","es":"llamo, invito, nombro","letra":"Κ"},{"id":292,"gr":"καλός","tr":"kalos","cod":"ADJ","es":"bello, bueno, hermoso, noble","letra":"Κ"},{"id":293,"gr":"καλῶς","tr":"kalōs","cod":"ADV","es":"bien, correctamente, excelente","letra":"Κ"},{"id":294,"gr":"καρδία","tr":"kardia","cod":"FSN - ας ἡ","es":"corazón (sede de vida emocional)","letra":"Κ"},{"id":295,"gr":"καρπός","tr":"karpos","cod":"MSN - οῦ ὁ","es":"fruto, resultado, beneficio","letra":"Κ"},{"id":296,"gr":"κατά","tr":"kata","cod":"PREP +gen./ac.","es":"gen.: contra / ac.: según, conforme a","letra":"Κ"},{"id":297,"gr":"καταβαίνω","tr":"katabainō","cod":"VB","es":"bajo, desciendo","letra":"Κ"},{"id":298,"gr":"καταλαμβάνω","tr":"katalambanō","cod":"VB","es":"comprendo, alcanzo, tomo posesión de","letra":"Κ"},{"id":299,"gr":"καταλείπω","tr":"kataleipō","cod":"VB","es":"dejo atrás, abandono, desamparo","letra":"Κ"},{"id":300,"gr":"καταργέω","tr":"katargeō","cod":"VB","es":"invalido, dejo sin efecto, anulo","letra":"Κ"},{"id":301,"gr":"κατηγορέω","tr":"katēgoreō","cod":"VB","es":"acuso, presento cargos contra","letra":"Κ"},{"id":302,"gr":"κατοικέω","tr":"katoikeō","cod":"VB","es":"habito, vivo en (un lugar)","letra":"Κ"},{"id":303,"gr":"καυχάομαι","tr":"kauchaomai","cod":"VB","es":"me jacto, me glorío, me enorgullezco","letra":"Κ"},{"id":304,"gr":"κεῖμαι","tr":"keimai","cod":"VB","es":"estoy acostado, recostado, colocado","letra":"Κ"},{"id":305,"gr":"κελεύω","tr":"keleuō","cod":"VB","es":"mando, ordeno, doy instrucción","letra":"Κ"},{"id":306,"gr":"κεφαλή","tr":"kephalē","cod":"FSN - ῆς ἡ","es":"cabeza, jefe, origen","letra":"Κ"},{"id":307,"gr":"κηρύσσω","tr":"kērussō","cod":"VB","es":"proclamo, predico, anuncio públicamente","letra":"Κ"},{"id":308,"gr":"κλαίω","tr":"klaiō","cod":"VB","es":"lloro, me lamento","letra":"Κ"},{"id":309,"gr":"κοπιάω","tr":"kopiaō","cod":"VB","es":"trabajo arduamente, me canso, me fatigo","letra":"Κ"},{"id":310,"gr":"κόσμος","tr":"kosmos","cod":"MSN - ου ὁ","es":"mundo, universo, humanidad, ornamento","letra":"Κ"},{"id":311,"gr":"κράζω","tr":"krazō","cod":"VB","es":"grito, clamo en voz alta","letra":"Κ"},{"id":312,"gr":"κρατέω","tr":"krateō","cod":"VB","es":"agarro, tomo, apreso, retengo","letra":"Κ"},{"id":313,"gr":"κραυγή","tr":"kraugē","cod":"FSN - ῆς ἡ","es":"clamor, grito","letra":"Κ"},{"id":314,"gr":"κρείσσων","tr":"kreissōn","cod":"ADJ - comp.","es":"mejor, más excelente, superior","letra":"Κ"},{"id":315,"gr":"κρίμα","tr":"krima","cod":"NSN - ατος τό","es":"juicio, veredicto, condena","letra":"Κ"},{"id":316,"gr":"κρίνω","tr":"krinō","cod":"VB","es":"juzgo, decido, condeno","letra":"Κ"},{"id":317,"gr":"κρίσις","tr":"krisis","cod":"FSN - εως ἡ","es":"juicio, proceso, decisión","letra":"Κ"},{"id":318,"gr":"κύριος","tr":"kurios","cod":"MSN - ου ὁ","es":"señor, amo, patrón; el Señor","letra":"Κ"},{"id":319,"gr":"κωλύω","tr":"kōluō","cod":"VB","es":"impido, prohíbo, obstaculizo","letra":"Κ"},{"id":320,"gr":"κώμη","tr":"kōmē","cod":"FSN - ης ἡ","es":"aldea, pueblo, caserío","letra":"Κ"},{"id":321,"gr":"λαλέω","tr":"laleō","cod":"VB","es":"hablo, digo, hago sonar","letra":"Λ"},{"id":322,"gr":"λαμβάνω","tr":"lambanō","cod":"VB","es":"tomo, recibo, agarro","letra":"Λ"},{"id":323,"gr":"λαός","tr":"laos","cod":"MSN - οῦ ὁ","es":"pueblo, nación, gente","letra":"Λ"},{"id":324,"gr":"λέγω","tr":"legō","cod":"VB","es":"digo, hablo, afirmo","letra":"Λ"},{"id":325,"gr":"λευκός","tr":"leukos","cod":"ADJ","es":"blanco, resplandeciente","letra":"Λ"},{"id":326,"gr":"λίθος","tr":"lithos","cod":"MSN - ου ὁ","es":"piedra","letra":"Λ"},{"id":327,"gr":"λογίζομαι","tr":"logizomai","cod":"VB","es":"calculo, considero, cuento, imputo","letra":"Λ"},{"id":328,"gr":"λόγος","tr":"logos","cod":"MSN - ου ὁ","es":"palabra, mensaje, discurso, razón","letra":"Λ"},{"id":329,"gr":"λοιπός","tr":"loipos","cod":"ADJ","es":"los demás, restante, en lo que queda","letra":"Λ"},{"id":330,"gr":"λυπέω","tr":"lupeō","cod":"VB","es":"entristezco, me lamento, aflijo","letra":"Λ"},{"id":331,"gr":"λύω","tr":"luō","cod":"VB","es":"desato, libero, disuelvo","letra":"Λ"},{"id":332,"gr":"Μαρία","tr":"Maria","cod":"FSN - ας ἡ","es":"María","letra":"Μ"},{"id":333,"gr":"Μωϋσῆς","tr":"Mōusēs","cod":"MSN - έως ὁ","es":"Moisés","letra":"Μ"},{"id":334,"gr":"μαθητής","tr":"mathētēs","cod":"MSN - οῦ ὁ","es":"discípulo, alumno, seguidor","letra":"Μ"},{"id":335,"gr":"μακάριος","tr":"makarios","cod":"ADJ","es":"dichoso, feliz, bienaventurado","letra":"Μ"},{"id":336,"gr":"μάλιστα","tr":"malista","cod":"ADV - superl.","es":"sobre todo, especialmente, en particular","letra":"Μ"},{"id":337,"gr":"μᾶλλον","tr":"mallon","cod":"ADV - comp.","es":"más, más bien, en mayor grado","letra":"Μ"},{"id":338,"gr":"μανθάνω","tr":"manthanō","cod":"VB","es":"aprendo, me entero, comprendo","letra":"Μ"},{"id":339,"gr":"μαρτυρέω","tr":"martureō","cod":"VB","es":"doy testimonio, testifico","letra":"Μ"},{"id":340,"gr":"μαρτυρία","tr":"marturia","cod":"FSN - ας ἡ","es":"testimonio","letra":"Μ"},{"id":341,"gr":"μάρτυς","tr":"martus","cod":"MSN - υρος ὁ","es":"testigo","letra":"Μ"},{"id":342,"gr":"μάχαιρα","tr":"machaira","cod":"FSN - ας ἡ","es":"espada, cuchillo","letra":"Μ"},{"id":343,"gr":"μέγας","tr":"megas","cod":"ADJ","es":"gran, grande, importante","letra":"Μ"},{"id":344,"gr":"μείζων","tr":"meizōn","cod":"ADJ - comp.","es":"más grande, mayor, más importante","letra":"Μ"},{"id":345,"gr":"μέλλω","tr":"mellō","cod":"VB","es":"estoy a punto de, me propongo (+inf.)","letra":"Μ"},{"id":346,"gr":"μέλος","tr":"melos","cod":"NSN - ους τό","es":"miembro, parte del cuerpo","letra":"Μ"},{"id":347,"gr":"μέν","tr":"men","cod":"PART - pospos.","es":"por una parte, ciertamente (correlativo)","letra":"Μ"},{"id":348,"gr":"μένω","tr":"menō","cod":"VB","es":"permanezco, me quedo, persisto","letra":"Μ"},{"id":349,"gr":"μέρος","tr":"meros","cod":"NSN - ους τό","es":"parte, porción, región","letra":"Μ"},{"id":350,"gr":"μέσος","tr":"mesos","cod":"ADJ","es":"medio, en medio de","letra":"Μ"},{"id":351,"gr":"μετά","tr":"meta","cod":"PREP +gen./ac.","es":"gen.: con, en compañía de / ac.: después de","letra":"Μ"},{"id":352,"gr":"μετανοέω","tr":"metanoeō","cod":"VB","es":"me arrepiento, cambio de mente/conducta","letra":"Μ"},{"id":353,"gr":"μή","tr":"mē","cod":"PART - neg.","es":"no (en contextos no indicativos)","letra":"Μ"},{"id":354,"gr":"μηδέ","tr":"mēde","cod":"CONJ - neg.","es":"ni, y no","letra":"Μ"},{"id":355,"gr":"μηδείς","tr":"mēdeis","cod":"PRON","es":"nadie, nada (con modos no indicativos)","letra":"Μ"},{"id":356,"gr":"μηκέτι","tr":"mēketi","cod":"ADV - neg.","es":"ya no, no más (con modos no indicativos)","letra":"Μ"},{"id":357,"gr":"μήποτε","tr":"mēpote","cod":"ADV/CONJ","es":"nunca, no sea que","letra":"Μ"},{"id":358,"gr":"μήτε","tr":"mēte","cod":"CONJ - neg.","es":"ni (en correlación: μήτε...μήτε)","letra":"Μ"},{"id":359,"gr":"μήτηρ","tr":"mētēr","cod":"FSN - τρός ἡ","es":"madre","letra":"Μ"},{"id":360,"gr":"μία","tr":"mia","cod":"NUM - f.","es":"una, uno solo","letra":"Μ"},{"id":361,"gr":"μικρόν","tr":"mikron","cod":"ADV/NSN","es":"un poco, pequeño intervalo","letra":"Μ"},{"id":362,"gr":"μικρός","tr":"mikros","cod":"ADJ","es":"pequeño, poco, breve","letra":"Μ"},{"id":363,"gr":"μιμνῄσκομαι","tr":"mimnēskomai","cod":"VB","es":"recuerdo, me acuerdo de","letra":"Μ"},{"id":364,"gr":"μισέω","tr":"miseō","cod":"VB","es":"odio, aborrezco","letra":"Μ"},{"id":365,"gr":"μισθός","tr":"misthos","cod":"MSN - οῦ ὁ","es":"paga, salario, recompensa","letra":"Μ"},{"id":366,"gr":"μνημεῖον","tr":"mnēmeion","cod":"NSN - ου τό","es":"tumba, sepulcro, monumento","letra":"Μ"},{"id":367,"gr":"μόνος","tr":"monos","cod":"ADJ","es":"único, solo, solamente","letra":"Μ"},{"id":368,"gr":"μυστήριον","tr":"mustērion","cod":"NSN - ου τό","es":"misterio, secreto revelado","letra":"Μ"},{"id":369,"gr":"ναί","tr":"nai","cod":"PART","es":"sí, ciertamente, por supuesto","letra":"Ν"},{"id":370,"gr":"ναός","tr":"naos","cod":"MSN - οῦ ὁ","es":"santuario, templo (recinto interior)","letra":"Ν"},{"id":371,"gr":"νεκρός","tr":"nekros","cod":"ADJ/MSN","es":"muerto; un muerto","letra":"Ν"},{"id":372,"gr":"νέος","tr":"neos","cod":"ADJ","es":"nuevo, joven, reciente","letra":"Ν"},{"id":373,"gr":"νεφέλη","tr":"nephelē","cod":"FSN - ης ἡ","es":"nube","letra":"Ν"},{"id":374,"gr":"νικάω","tr":"nikaō","cod":"VB","es":"venzo, triunfo, supero","letra":"Ν"},{"id":375,"gr":"νίπτω","tr":"niptō","cod":"VB","es":"lavo (especialmente manos o pies)","letra":"Ν"},{"id":376,"gr":"νόμος","tr":"nomos","cod":"MSN - ου ὁ","es":"ley, principio, norma; la Ley de Moisés","letra":"Ν"},{"id":377,"gr":"νοῦς","tr":"nous","cod":"MSN - νοός ὁ","es":"mente, intelecto, comprensión","letra":"Ν"},{"id":378,"gr":"νῦν","tr":"nun","cod":"ADV","es":"ahora, en este momento","letra":"Ν"},{"id":379,"gr":"νύξ","tr":"nux","cod":"FSN - νυκτός ἡ","es":"noche","letra":"Ν"},{"id":380,"gr":"ὁ, ἡ, τό","tr":"ho, hē, to","cod":"ART - def.","es":"el, la, lo (artículo definido)","letra":"Ο"},{"id":381,"gr":"ὁδός","tr":"hodos","cod":"FSN - οῦ ἡ","es":"camino, carretera, manera de vivir","letra":"Ο"},{"id":382,"gr":"οἶδα","tr":"oida","cod":"VB - perf.","es":"sé, conozco (perfecto con sentido presente)","letra":"Ο"},{"id":383,"gr":"οἰκία","tr":"oikia","cod":"FSN - ας ἡ","es":"casa, hogar, familia","letra":"Ο"},{"id":384,"gr":"οἰκοδομέω","tr":"oikodomeō","cod":"VB","es":"edifico, construyo, levanto","letra":"Ο"},{"id":385,"gr":"οἶκος","tr":"oikos","cod":"MSN - ου ὁ","es":"casa, hogar, familia, linaje","letra":"Ο"},{"id":386,"gr":"οἶνος","tr":"oinos","cod":"MSN - ου ὁ","es":"vino","letra":"Ο"},{"id":387,"gr":"ὀκτώ","tr":"oktō","cod":"NUM","es":"ocho","letra":"Ο"},{"id":388,"gr":"ὀλίγος","tr":"oligos","cod":"ADJ","es":"poco, pequeño, breve","letra":"Ο"},{"id":389,"gr":"ὅλος","tr":"holos","cod":"ADJ","es":"entero, completo, todo","letra":"Ο"},{"id":390,"gr":"ὀμνύω","tr":"homnuō","cod":"VB","es":"juro, hago un juramento","letra":"Ο"},{"id":391,"gr":"ὅμοιος","tr":"omoios","cod":"ADJ","es":"semejante, parecido, similar","letra":"Ο"},{"id":392,"gr":"ὁμοίως","tr":"homoiōs","cod":"ADV","es":"igualmente, del mismo modo","letra":"Ο"},{"id":393,"gr":"ὁμολογέω","tr":"homologeō","cod":"VB","es":"confieso, prometo, afirmo públicamente","letra":"Ο"},{"id":394,"gr":"ὄνομα","tr":"onoma","cod":"NSN - ατος τό","es":"nombre","letra":"Ο"},{"id":395,"gr":"ὀπίσω","tr":"opisō","cod":"ADV/PREP +gen.","es":"detrás de, después de, en pos de","letra":"Ο"},{"id":396,"gr":"ὅπου","tr":"hopou","cod":"ADV","es":"donde, en donde","letra":"Ο"},{"id":397,"gr":"ὅπως","tr":"hopōs","cod":"CONJ","es":"para que, de modo que (+subj.)","letra":"Ο"},{"id":398,"gr":"ὁράω","tr":"horaō","cod":"VB","es":"veo, contemplo, percibo","letra":"Ο"},{"id":399,"gr":"ὀργή","tr":"orgē","cod":"FSN - ῆς ἡ","es":"ira, furor, indignación","letra":"Ο"},{"id":400,"gr":"ὄρος","tr":"oros","cod":"NSN - ους τό","es":"montaña, monte, colina","letra":"Ο"},{"id":401,"gr":"ὅς, ἥ, ὅ","tr":"hos, hē, ho","cod":"PRON - rel.","es":"el cual, la cual, lo cual, que, quien","letra":"Ο"},{"id":402,"gr":"ὅσος","tr":"hosos","cod":"PRON/ADJ","es":"cuanto, cuán grande, todo lo que","letra":"Ο"},{"id":403,"gr":"ὅστις","tr":"hostis","cod":"PRON","es":"quienquiera que, el que, quien","letra":"Ο"},{"id":404,"gr":"ὅταν","tr":"hotan","cod":"CONJ","es":"cuando(quiera), cada vez que (+subj.)","letra":"Ο"},{"id":405,"gr":"ὅτε","tr":"hote","cod":"CONJ","es":"cuando, en el tiempo que (+ind.)","letra":"Ο"},{"id":406,"gr":"ὅτι","tr":"hoti","cod":"CONJ","es":"que, porque (introduce cita directa: \"\")","letra":"Ο"},{"id":407,"gr":"οὗ","tr":"hou","cod":"ADV","es":"donde, en donde","letra":"Ο"},{"id":408,"gr":"οὐ / οὐκ / οὐχ","tr":"ou","cod":"PART - neg.","es":"no (con indicativo)","letra":"Ο"},{"id":409,"gr":"οὐαί","tr":"ouai","cod":"INTERJ","es":"¡Ay!, ¡Maldición!","letra":"Ο"},{"id":410,"gr":"οὐδέ","tr":"oude","cod":"CONJ - neg.","es":"ni, tampoco, ni siquiera","letra":"Ο"},{"id":411,"gr":"οὐδείς","tr":"oudeis","cod":"PRON","es":"nadie, nada (con indicativo)","letra":"Ο"},{"id":412,"gr":"οὐκέτι","tr":"ouketi","cod":"ADV - neg.","es":"ya no, no más","letra":"Ο"},{"id":413,"gr":"οὖν","tr":"oun","cod":"CONJ - pospos.","es":"entonces, por consiguiente, pues bien","letra":"Ο"},{"id":414,"gr":"οὔπω","tr":"oupō","cod":"ADV - neg.","es":"todavía no, aún no","letra":"Ο"},{"id":415,"gr":"οὐρανός","tr":"ouranos","cod":"MSN - οῦ ὁ","es":"cielo, los cielos","letra":"Ο"},{"id":416,"gr":"οὖς","tr":"ous","cod":"NSN - ωτός τό","es":"oído, oreja","letra":"Ο"},{"id":417,"gr":"οὔτε","tr":"oute","cod":"CONJ - neg.","es":"ni (οὔτε...οὔτε = ni...ni)","letra":"Ο"},{"id":418,"gr":"οὗτος","tr":"houtos","cod":"PRON/DEM","es":"este, esta, esto","letra":"Ο"},{"id":419,"gr":"οὕτως","tr":"houtōs","cod":"ADV","es":"de esta manera, así, de este modo","letra":"Ο"},{"id":420,"gr":"οὐχί","tr":"ouchi","cod":"PART - neg.","es":"no (forma enfática, en preguntas)","letra":"Ο"},{"id":421,"gr":"ὀφείλω","tr":"opheilō","cod":"VB","es":"debo, tengo obligación, estoy en deuda","letra":"Ο"},{"id":422,"gr":"ὀφθαλμός","tr":"ophthalmos","cod":"MSN - οῦ ὁ","es":"ojo","letra":"Ο"},{"id":423,"gr":"ὄχλος","tr":"ochlos","cod":"MSN - ου ὁ","es":"multitud, muchedumbre, gentío","letra":"Ο"},{"id":424,"gr":"Παῦλος","tr":"Paulos","cod":"MSN - ου ὁ","es":"Pablo","letra":"Π"},{"id":425,"gr":"Πέτρος","tr":"Petros","cod":"MSN - ου ὁ","es":"Pedro","letra":"Π"},{"id":426,"gr":"Πιλᾶτος","tr":"Pilatos","cod":"MSN - ου ὁ","es":"Pilato","letra":"Π"},{"id":427,"gr":"παιδίον","tr":"paidion","cod":"NSN - ου τό","es":"niño, niña, infante","letra":"Π"},{"id":428,"gr":"παῖς","tr":"pais","cod":"MSN - παιδός ὁ","es":"niño, siervo, esclavo","letra":"Π"},{"id":429,"gr":"πάλιν","tr":"palin","cod":"ADV","es":"de nuevo, otra vez, de regreso","letra":"Π"},{"id":430,"gr":"πάντοτε","tr":"pantote","cod":"ADV","es":"siempre, en todo tiempo","letra":"Π"},{"id":431,"gr":"παρά","tr":"para","cod":"PREP +gen./dat./ac.","es":"gen.: de parte de / dat.: junto a / ac.: a lo largo de, contra","letra":"Π"},{"id":432,"gr":"παραβολή","tr":"parabolē","cod":"FSN - ῆς ἡ","es":"parábola, proverbio, comparación","letra":"Π"},{"id":433,"gr":"παραγγέλλω","tr":"paraggellō","cod":"VB","es":"mando, ordeno, doy instrucciones","letra":"Π"},{"id":434,"gr":"παραγίνομαι","tr":"paraginomai","cod":"VB","es":"llego, me presento, me pongo de parte de","letra":"Π"},{"id":435,"gr":"παραδίδωμι","tr":"paradidōmi","cod":"VB","es":"entrego, transmito, traiciono","letra":"Π"},{"id":436,"gr":"παρακαλέω","tr":"parakaleō","cod":"VB","es":"ruego, pido, consuelo, exhorto","letra":"Π"},{"id":437,"gr":"παράκλησις","tr":"paraklēsis","cod":"FSN - εως ἡ","es":"ánimo, consuelo, exhortación","letra":"Π"},{"id":438,"gr":"παραλαμβάνω","tr":"paralambanō","cod":"VB","es":"tomo, recibo, acepto","letra":"Π"},{"id":439,"gr":"πάρειμι","tr":"pareimi","cod":"VB","es":"estoy presente, he llegado","letra":"Π"},{"id":440,"gr":"παρέρχομαι","tr":"parerchomai","cod":"VB","es":"paso, dejo a un lado, transcurro","letra":"Π"},{"id":441,"gr":"παρίστημι","tr":"paristēmi","cod":"VB","es":"pongo al lado de, presento, ofrezco","letra":"Π"},{"id":442,"gr":"παρουσία","tr":"parousia","cod":"FSN - ας ἡ","es":"venida, llegada, presencia; la Parusía","letra":"Π"},{"id":443,"gr":"παρρησία","tr":"parrēsia","cod":"FSN - ας ἡ","es":"franqueza, valor, audacia, libertad de hablar","letra":"Π"},{"id":444,"gr":"πᾶς","tr":"pas","cod":"ADJ/PRON","es":"todo, toda, cada, entero, todos","letra":"Π"},{"id":445,"gr":"πάσχα","tr":"pascha","cod":"NSN - indecl.","es":"Pascua, cordero pascual","letra":"Π"},{"id":446,"gr":"πάσχω","tr":"paschō","cod":"VB","es":"sufro, padezco, experimento","letra":"Π"},{"id":447,"gr":"πατήρ","tr":"patēr","cod":"MSN - τρός ὁ","es":"padre, antepasado","letra":"Π"},{"id":448,"gr":"πείθω","tr":"peithō","cod":"VB","es":"convenzo, persuado (med.: confío en)","letra":"Π"},{"id":449,"gr":"πεινάω","tr":"peinaō","cod":"VB","es":"tengo hambre","letra":"Π"},{"id":450,"gr":"πειράζω","tr":"peirazō","cod":"VB","es":"tiento, pongo a prueba, intento","letra":"Π"},{"id":451,"gr":"πέμπω","tr":"pempō","cod":"VB","es":"envío, mando","letra":"Π"},{"id":452,"gr":"πέντε","tr":"pente","cod":"NUM","es":"cinco","letra":"Π"},{"id":453,"gr":"πέραν","tr":"peran","cod":"PREP +gen.","es":"al otro lado de","letra":"Π"},{"id":454,"gr":"περί","tr":"peri","cod":"PREP +gen./ac.","es":"gen.: acerca de, a favor de / ac.: alrededor de","letra":"Π"},{"id":455,"gr":"περιπατέω","tr":"peripateō","cod":"VB","es":"ando, camino, vivo (con una conducta)","letra":"Π"},{"id":456,"gr":"περισσεύω","tr":"perisseuō","cod":"VB","es":"tengo de sobra, abundo, sobreabundo","letra":"Π"},{"id":457,"gr":"περιτομή","tr":"peritomē","cod":"FSN - ῆς ἡ","es":"circuncisión","letra":"Π"},{"id":458,"gr":"πίνω","tr":"pinō","cod":"VB","es":"bebo","letra":"Π"},{"id":459,"gr":"πίπτω","tr":"piptō","cod":"VB","es":"caigo, me postro","letra":"Π"},{"id":460,"gr":"πιστεύω","tr":"pisteuō","cod":"VB","es":"creo, confío, tengo fe (+εἰς/dat.)","letra":"Π"},{"id":461,"gr":"πίστις","tr":"pistis","cod":"FSN - εως ἡ","es":"fe, confianza, fidelidad, creencia","letra":"Π"},{"id":462,"gr":"πιστός","tr":"pistos","cod":"ADJ","es":"fiel, leal, digno de confianza, creyente","letra":"Π"},{"id":463,"gr":"πλανάω","tr":"planaō","cod":"VB","es":"engaño, extravío, llevo al error","letra":"Π"},{"id":464,"gr":"πλείων","tr":"pleiōn","cod":"ADJ - comp.","es":"más, mayor, en mayor número","letra":"Π"},{"id":465,"gr":"πλῆθος","tr":"plēthos","cod":"NSN - ους τό","es":"multitud, gran cantidad, muchedumbre","letra":"Π"},{"id":466,"gr":"πλήν","tr":"plēn","cod":"CONJ/PREP","es":"sin embargo, pero, excepto","letra":"Π"},{"id":467,"gr":"πληρόω","tr":"plēroō","cod":"VB","es":"lleno, cumplo, completo","letra":"Π"},{"id":468,"gr":"πλοῖον","tr":"ploion","cod":"NSN - ου τό","es":"barco, barca, embarcación","letra":"Π"},{"id":469,"gr":"πλούσιος","tr":"plousios","cod":"ADJ","es":"rico, adinerado","letra":"Π"},{"id":470,"gr":"πνεῦμα","tr":"pneuma","cod":"NSN - ατος τό","es":"espíritu, viento, aliento; el Espíritu","letra":"Π"},{"id":471,"gr":"πνευματικός","tr":"pneumatikos","cod":"ADJ","es":"espiritual, del Espíritu","letra":"Π"},{"id":472,"gr":"πόθεν","tr":"pothen","cod":"ADV - interrog.","es":"¿de dónde?, ¿cómo?","letra":"Π"},{"id":473,"gr":"ποιέω","tr":"poieō","cod":"VB","es":"hago, fabrico, produzco, practico","letra":"Π"},{"id":474,"gr":"ποιμήν","tr":"poimēn","cod":"MSN - ένος ὁ","es":"pastor","letra":"Π"},{"id":475,"gr":"ποῖος","tr":"poios","cod":"ADJ - interrog.","es":"¿de qué clase?, ¿cuál?","letra":"Π"},{"id":476,"gr":"πόλις","tr":"polis","cod":"FSN - εως ἡ","es":"ciudad, población","letra":"Π"},{"id":477,"gr":"πολύς","tr":"polus","cod":"ADJ","es":"mucho, muchos, en gran cantidad","letra":"Π"},{"id":478,"gr":"πονηρός","tr":"ponēros","cod":"ADJ","es":"malvado, malo, maligno","letra":"Π"},{"id":479,"gr":"πορεύομαι","tr":"poreuomai","cod":"VB","es":"me voy, me marcho, voy, camino","letra":"Π"},{"id":480,"gr":"πορνεία","tr":"porneia","cod":"FSN - ας ἡ","es":"inmoralidad sexual, fornicación","letra":"Π"},{"id":481,"gr":"πόσος","tr":"posos","cod":"ADJ - interrog.","es":"¿cuán grande?, ¿cuánto?","letra":"Π"},{"id":482,"gr":"ποτέ","tr":"pote","cod":"ADV - pospos.","es":"alguna vez, en algún momento","letra":"Π"},{"id":483,"gr":"ποτήριον","tr":"potērion","cod":"NSN - ου τό","es":"copa, cáliz","letra":"Π"},{"id":484,"gr":"ποῦ","tr":"pou","cod":"ADV - interrog.","es":"¿dónde?, ¿adónde?","letra":"Π"},{"id":485,"gr":"πούς","tr":"pous","cod":"MSN - ποδός ὁ","es":"pie","letra":"Π"},{"id":486,"gr":"πράσσω","tr":"prassō","cod":"VB","es":"hago, practico, actúo","letra":"Π"},{"id":487,"gr":"πρεσβύτερος","tr":"presbuteros","cod":"MSN - ου ὁ","es":"anciano, presbítero","letra":"Π"},{"id":488,"gr":"πρό","tr":"pro","cod":"PREP +gen.","es":"antes de (tiempo), delante de (lugar)","letra":"Π"},{"id":489,"gr":"πρόβατον","tr":"probaton","cod":"NSN - ου τό","es":"oveja, cordero","letra":"Π"},{"id":490,"gr":"πρός","tr":"pros","cod":"PREP +ac.","es":"a, hacia, junto a, para (+gen./dat. raro)","letra":"Π"},{"id":491,"gr":"προσέρχομαι","tr":"proserchomai","cod":"VB","es":"me acerco, vengo a (+dat.)","letra":"Π"},{"id":492,"gr":"προσευχή","tr":"proseuchē","cod":"FSN - ῆς ἡ","es":"oración","letra":"Π"},{"id":493,"gr":"προσεύχομαι","tr":"proseuchomai","cod":"VB","es":"oro, hago oración","letra":"Π"},{"id":494,"gr":"προσέχω","tr":"prosechō","cod":"VB","es":"atiendo a, presto atención, tengo cuidado","letra":"Π"},{"id":495,"gr":"προσκαλέομαι","tr":"proskaleomai","cod":"VB","es":"llamo a mí, invito, convoco","letra":"Π"},{"id":496,"gr":"προσκυνέω","tr":"proskuneō","cod":"VB","es":"adoro, me postro ante, venero","letra":"Π"},{"id":497,"gr":"προσφέρω","tr":"prospherō","cod":"VB","es":"traigo, ofrezco, presento","letra":"Π"},{"id":498,"gr":"πρόσωπον","tr":"prosōpon","cod":"NSN - ου τό","es":"cara, rostro, presencia, persona","letra":"Π"},{"id":499,"gr":"προφητεύω","tr":"prophēteuō","cod":"VB","es":"profetizo, hablo en nombre de Dios","letra":"Π"},{"id":500,"gr":"προφήτης","tr":"prophētēs","cod":"MSN - ου ὁ","es":"profeta","letra":"Π"},{"id":501,"gr":"πρῶτος","tr":"prōtos","cod":"ADJ - superl.","es":"primero, el más importante","letra":"Π"},{"id":502,"gr":"πτωχός","tr":"ptōchos","cod":"ADJ/MSN","es":"pobre, mendigo, indigente","letra":"Π"},{"id":503,"gr":"πῦρ","tr":"pur","cod":"NSN - πυρός τό","es":"fuego","letra":"Π"},{"id":504,"gr":"πῶς","tr":"pōs","cod":"ADV - interrog.","es":"¿cómo?, ¿de qué manera?","letra":"Π"},{"id":505,"gr":"ῥαββί","tr":"rabbi","cod":"MSN - indecl.","es":"rabí, maestro (título honorífico)","letra":"Ρ"},{"id":506,"gr":"ῥῆμα","tr":"rēma","cod":"NSN - ατος τό","es":"palabra, dicho, declaración","letra":"Ρ"},{"id":507,"gr":"ῥύομαι","tr":"ruomai","cod":"VB","es":"rescato, libero, salvo de","letra":"Ρ"},{"id":508,"gr":"Σατανᾶς","tr":"Satanas","cod":"MSN - α ὁ","es":"Satanás","letra":"Σ"},{"id":509,"gr":"Σίμων","tr":"Simōn","cod":"MSN - ωνος ὁ","es":"Simón","letra":"Σ"},{"id":510,"gr":"σάββατον","tr":"sabbaton","cod":"NSN - ου τό","es":"sábado, semana (pl.)","letra":"Σ"},{"id":511,"gr":"σάρξ","tr":"sarx","cod":"FSN - σαρκός ἡ","es":"carne, cuerpo, naturaleza humana","letra":"Σ"},{"id":512,"gr":"σεαυτοῦ","tr":"seautou","cod":"PRON - refl.","es":"ti mismo, de ti mismo","letra":"Σ"},{"id":513,"gr":"σημεῖον","tr":"sēmeion","cod":"NSN - ου τό","es":"señal, milagro, prodigio","letra":"Σ"},{"id":514,"gr":"σήμερον","tr":"sēmeron","cod":"ADV","es":"hoy, este día","letra":"Σ"},{"id":515,"gr":"σκανδαλίζω","tr":"skandalizō","cod":"VB","es":"escandalizo, hago caer, ofendo","letra":"Σ"},{"id":516,"gr":"σκεῦος","tr":"skeuos","cod":"NSN - ους τό","es":"utensilio, recipiente (pl.: propiedad)","letra":"Σ"},{"id":517,"gr":"σκοτία","tr":"skotia","cod":"FSN - ας ἡ","es":"oscuridad, tinieblas","letra":"Σ"},{"id":518,"gr":"σκότος","tr":"skotos","cod":"NSN - ους τό","es":"oscuridad, tinieblas","letra":"Σ"},{"id":519,"gr":"σός","tr":"sos","cod":"ADJ - poses.","es":"tuyo, de ti","letra":"Σ"},{"id":520,"gr":"σοφία","tr":"sophia","cod":"FSN - ας ἡ","es":"sabiduría","letra":"Σ"},{"id":521,"gr":"σπείρω","tr":"speirō","cod":"VB","es":"siembro","letra":"Σ"},{"id":522,"gr":"σπέρμα","tr":"sperma","cod":"NSN - ατος τό","es":"semilla, descendencia","letra":"Σ"},{"id":523,"gr":"σταυρός","tr":"stauros","cod":"MSN - οῦ ὁ","es":"cruz","letra":"Σ"},{"id":524,"gr":"σταυρόω","tr":"stauroō","cod":"VB","es":"crucifico, clavo en la cruz","letra":"Σ"},{"id":525,"gr":"στόμα","tr":"stoma","cod":"NSN - ατος τό","es":"boca","letra":"Σ"},{"id":526,"gr":"στρατιώτης","tr":"stratiōtēs","cod":"MSN - ου ὁ","es":"soldado","letra":"Σ"},{"id":527,"gr":"σύ","tr":"su","cod":"PRON - 2ª sg.","es":"tú","letra":"Σ"},{"id":528,"gr":"σύν","tr":"sun","cod":"PREP +dat.","es":"con, junto con, en compañía de","letra":"Σ"},{"id":529,"gr":"συνάγω","tr":"sunagō","cod":"VB","es":"reúno, recojo, congrego","letra":"Σ"},{"id":530,"gr":"συναγωγή","tr":"sunagōgē","cod":"FSN - ῆς ἡ","es":"sinagoga, asamblea","letra":"Σ"},{"id":531,"gr":"συνείδησις","tr":"suneidēsis","cod":"FSN - εως ἡ","es":"conciencia","letra":"Σ"},{"id":532,"gr":"συνέρχομαι","tr":"sunerchomai","cod":"VB","es":"me reúno, me junto con","letra":"Σ"},{"id":533,"gr":"συνίημι","tr":"suniēmi","cod":"VB","es":"entiendo, comprendo, capto","letra":"Σ"},{"id":534,"gr":"σῴζω","tr":"sōzō","cod":"VB","es":"salvo, libero, curo, preservo","letra":"Σ"},{"id":535,"gr":"σῶμα","tr":"sōma","cod":"NSN - ατος τό","es":"cuerpo, cadáver","letra":"Σ"},{"id":536,"gr":"σωτήρ","tr":"sōtēr","cod":"MSN - ῆρος ὁ","es":"salvador, libertador","letra":"Σ"},{"id":537,"gr":"σωτηρία","tr":"sōtēria","cod":"FSN - ας ἡ","es":"salvación, liberación","letra":"Σ"},{"id":538,"gr":"Τιμόθεος","tr":"Timotheos","cod":"MSN - ου ὁ","es":"Timoteo","letra":"Τ"},{"id":539,"gr":"τε","tr":"te","cod":"CONJ - pospos.","es":"y (τε...καί = tanto...como)","letra":"Τ"},{"id":540,"gr":"τεκνίον","tr":"teknion","cod":"NSN - ου τό","es":"hijito, niñito (término afectuoso)","letra":"Τ"},{"id":541,"gr":"τέκνον","tr":"teknon","cod":"NSN - ου τό","es":"hijo, niño, descendiente","letra":"Τ"},{"id":542,"gr":"τελειόω","tr":"teleioō","cod":"VB","es":"perfecciono, completo, termino","letra":"Τ"},{"id":543,"gr":"τελέω","tr":"teleō","cod":"VB","es":"termino, cumplo, llevo a cabo","letra":"Τ"},{"id":544,"gr":"τέλος","tr":"telos","cod":"NSN - ους τό","es":"fin, término, propósito, cumplimiento","letra":"Τ"},{"id":545,"gr":"τέσσαρες","tr":"tessares","cod":"NUM","es":"cuatro","letra":"Τ"},{"id":546,"gr":"τηρέω","tr":"tēreō","cod":"VB","es":"guardo, observo, conservo, cumplo","letra":"Τ"},{"id":547,"gr":"τί","tr":"ti","cod":"ADV/PRON","es":"¿por qué?, ¿qué? (forma interrogativa)","letra":"Τ"},{"id":548,"gr":"τίθημι","tr":"tithēmi","cod":"VB","es":"pongo, coloco, establezco","letra":"Τ"},{"id":549,"gr":"τιμάω","tr":"timaō","cod":"VB","es":"honro, aprecio, valoro","letra":"Τ"},{"id":550,"gr":"τιμή","tr":"timē","cod":"FSN - ῆς ἡ","es":"honor, valor, precio, honra","letra":"Τ"},{"id":551,"gr":"τις","tr":"tis","cod":"PRON - indef.","es":"alguien, algo, cierto (enclítico)","letra":"Τ"},{"id":552,"gr":"τίς","tr":"tis","cod":"PRON - interrog.","es":"¿quién?, ¿cuál?, ¿qué? (con acento)","letra":"Τ"},{"id":553,"gr":"τοιοῦτος","tr":"toioutos","cod":"ADJ/PRON","es":"tal, semejante, de tal clase","letra":"Τ"},{"id":554,"gr":"τόπος","tr":"topos","cod":"MSN - ου ὁ","es":"lugar, sitio, espacio","letra":"Τ"},{"id":555,"gr":"τότε","tr":"tote","cod":"ADV","es":"entonces, en aquel tiempo","letra":"Τ"},{"id":556,"gr":"τρεῖς","tr":"treis","cod":"NUM","es":"tres","letra":"Τ"},{"id":557,"gr":"τρίτος","tr":"tritos","cod":"ADJ/NUM","es":"tercero","letra":"Τ"},{"id":558,"gr":"τυφλός","tr":"tuphlos","cod":"ADJ/MSN","es":"ciego, el ciego","letra":"Τ"},{"id":559,"gr":"ὕδωρ","tr":"hudōr","cod":"NSN - ατος τό","es":"agua","letra":"Υ"},{"id":560,"gr":"υἱός","tr":"huios","cod":"MSN - οῦ ὁ","es":"hijo","letra":"Υ"},{"id":561,"gr":"ὑμεῖς","tr":"humeis","cod":"PRON - 2ª pl.","es":"vosotros, vosotras, ustedes","letra":"Υ"},{"id":562,"gr":"ὑπάγω","tr":"hupagō","cod":"VB","es":"me voy, me marcho, me retiro","letra":"Υ"},{"id":563,"gr":"ὑπάρχω","tr":"huparchō","cod":"VB","es":"existo, soy, estoy, me pertenece","letra":"Υ"},{"id":564,"gr":"ὑπέρ","tr":"huper","cod":"PREP +gen./ac.","es":"gen.: en favor de, en lugar de / ac.: sobre","letra":"Υ"},{"id":565,"gr":"ὑπηρέτης","tr":"hupēretēs","cod":"MSN - ου ὁ","es":"sirviente, asistente, servidor","letra":"Υ"},{"id":566,"gr":"ὑπό","tr":"hupo","cod":"PREP +gen./ac.","es":"gen.: por (agente) / ac.: bajo, debajo de","letra":"Υ"},{"id":567,"gr":"ὑπομονή","tr":"hupomonē","cod":"FSN - ῆς ἡ","es":"paciencia, perseverancia, resistencia","letra":"Υ"},{"id":568,"gr":"ὑποστρέφω","tr":"hupostrephō","cod":"VB","es":"regreso, vuelvo atrás","letra":"Υ"},{"id":569,"gr":"ὑποτάσσω","tr":"hupotassō","cod":"VB","es":"someto, subordino (med.: me someto)","letra":"Υ"},{"id":570,"gr":"Φαρισαῖος","tr":"Pharisaios","cod":"MSN - ου ὁ","es":"fariseo","letra":"Φ"},{"id":571,"gr":"Φίλιππος","tr":"Philippos","cod":"MSN - ου ὁ","es":"Felipe","letra":"Φ"},{"id":572,"gr":"φαίνω","tr":"phainō","cod":"VB","es":"brillo, aparezco, me muestro","letra":"Φ"},{"id":573,"gr":"φανερόω","tr":"phaneroō","cod":"VB","es":"revelo, doy a conocer, manifiesto","letra":"Φ"},{"id":574,"gr":"φέρω","tr":"pherō","cod":"VB","es":"llevo, cargo, traigo, soporto","letra":"Φ"},{"id":575,"gr":"φεύγω","tr":"pheugō","cod":"VB","es":"huyo, escapo, evito","letra":"Φ"},{"id":576,"gr":"φημί","tr":"phēmi","cod":"VB","es":"digo, afirmo, declaro","letra":"Φ"},{"id":577,"gr":"φιλέω","tr":"phileō","cod":"VB","es":"amo, quiero, me gusta, beso","letra":"Φ"},{"id":578,"gr":"φίλος","tr":"philos","cod":"MSN/ADJ - ου ὁ","es":"amigo, amigable, amado","letra":"Φ"},{"id":579,"gr":"φοβέομαι","tr":"phobeomai","cod":"VB","es":"temo, tengo miedo, reverencio","letra":"Φ"},{"id":580,"gr":"φόβος","tr":"phobos","cod":"MSN - ου ὁ","es":"miedo, temor, reverencia","letra":"Φ"},{"id":581,"gr":"φρονέω","tr":"phroneō","cod":"VB","es":"pienso, reflexiono, tengo la mente en","letra":"Φ"},{"id":582,"gr":"φυλακή","tr":"phulakē","cod":"FSN - ῆς ἡ","es":"cárcel, prisión, vigilia (de guardia)","letra":"Φ"},{"id":583,"gr":"φυλάσσω","tr":"phulassō","cod":"VB","es":"vigilo, guardo, observo, me cuido de","letra":"Φ"},{"id":584,"gr":"φυλή","tr":"phulē","cod":"FSN - ῆς ἡ","es":"tribu, clan, raza","letra":"Φ"},{"id":585,"gr":"φωνέω","tr":"phōneō","cod":"VB","es":"grito, llamo, convoco","letra":"Φ"},{"id":586,"gr":"φωνή","tr":"phōnē","cod":"FSN - ῆς ἡ","es":"sonido, voz","letra":"Φ"},{"id":587,"gr":"φῶς","tr":"phōs","cod":"NSN - φωτός τό","es":"luz","letra":"Φ"},{"id":588,"gr":"Χριστός","tr":"Christos","cod":"MSN - οῦ ὁ","es":"Cristo, Mesías, el Ungido","letra":"Χ"},{"id":589,"gr":"χαίρω","tr":"chairō","cod":"VB","es":"me alegro, me regocijo (imper.: ¡Salud!)","letra":"Χ"},{"id":590,"gr":"χαρά","tr":"chara","cod":"FSN - ᾶς ἡ","es":"gozo, alegría","letra":"Χ"},{"id":591,"gr":"χαρίζομαι","tr":"charizomai","cod":"VB","es":"regalo, doy gratuitamente, perdono","letra":"Χ"},{"id":592,"gr":"χάρις","tr":"charis","cod":"FSN - ιτος ἡ","es":"gracia, favor, gratitud","letra":"Χ"},{"id":593,"gr":"χείρ","tr":"cheir","cod":"FSN - χειρός ἡ","es":"mano","letra":"Χ"},{"id":594,"gr":"χείρων","tr":"cheirōn","cod":"ADJ - comp.","es":"peor, más malo, inferior","letra":"Χ"},{"id":595,"gr":"χήρα","tr":"chēra","cod":"FSN - ας ἡ","es":"viuda","letra":"Χ"},{"id":596,"gr":"χιλιάς","tr":"chilias","cod":"FSN - άδος ἡ","es":"mil, un millar","letra":"Χ"},{"id":597,"gr":"χρεία","tr":"chreia","cod":"FSN - ας ἡ","es":"necesidad, falta, uso","letra":"Χ"},{"id":598,"gr":"χώρα","tr":"chōra","cod":"FSN - ας ἡ","es":"región, territorio, país, campo","letra":"Χ"},{"id":599,"gr":"χωρίς","tr":"chōris","cod":"PREP +gen.","es":"aparte de, sin, separado de","letra":"Χ"},{"id":600,"gr":"ψυχή","tr":"psuchē","cod":"FSN - ῆς ἡ","es":"alma, ser, vida, yo mismo","letra":"Ψ"},{"id":601,"gr":"ὧδε","tr":"hōde","cod":"ADV","es":"aquí, acá, en este lugar","letra":"Ω"},{"id":602,"gr":"ὥρα","tr":"hōra","cod":"FSN - ας ἡ","es":"hora, ocasión, momento","letra":"Ω"},{"id":603,"gr":"ὡς","tr":"hōs","cod":"ADV/CONJ","es":"como, cuando, que, así como","letra":"Ω"},{"id":604,"gr":"ὥσπερ","tr":"hōsper","cod":"ADV/CONJ","es":"tal como, así como (comparativo)","letra":"Ω"},{"id":605,"gr":"ὥστε","tr":"hōste","cod":"CONJ","es":"de modo que, por eso, de manera que","letra":"Ω"},{"id":606,"gr":"ὠτίον","tr":"ōtion","cod":"NSN - ου τό","es":"oreja, oído","letra":"Ω"},{"gr":"ἀπό","tr":"apo","caso":"genitivo","es":"procedente de, desde, alejándose de","cod":"PREP +gen.","letra":"✦"},{"gr":"ἄχρι","tr":"achri","caso":"genitivo","es":"hasta","cod":"PREP +gen.","letra":"✦"},{"gr":"διά","tr":"dia","caso":"genitivo","es":"a través de, por medio de","cod":"PREP +gen.","letra":"✦"},{"gr":"διά","tr":"dia","caso":"acusativo","es":"por causa de, debido a","cod":"PREP +acu.","letra":"✦"},{"gr":"εἰς","tr":"eis","caso":"acusativo","es":"a, hacia, entrando en","cod":"PREP +acu.","letra":"✦"},{"gr":"ἐκ / ἐξ","tr":"ek / ex","caso":"genitivo","es":"saliendo fuera de, desde","cod":"PREP +gen.","letra":"✦"},{"gr":"ἐν","tr":"en","caso":"dativo","es":"en","cod":"PREP +dat.","letra":"✦"},{"gr":"ἐνώπιον","tr":"enōpion","caso":"genitivo","es":"delante de, en presencia de","cod":"PREP +gen.","letra":"✦"},{"gr":"ἔξω","tr":"exō","caso":"genitivo","es":"fuera de, afuera","cod":"PREP +gen.","letra":"✦"},{"gr":"ἐπί","tr":"epi","caso":"genitivo","es":"posición sobre/encima de, en tiempo de","cod":"PREP +gen.","letra":"✦"},{"gr":"ἐπί","tr":"epi","caso":"dativo","es":"posición en/sobre, a base de","cod":"PREP +dat.","letra":"✦"},{"gr":"ἐπί","tr":"epi","caso":"acusativo","es":"movimiento hacia encima de, sobre","cod":"PREP +acu.","letra":"✦"},{"gr":"ἕως","tr":"heōs","caso":"genitivo","es":"hasta","cod":"PREP +gen.","letra":"✦"},{"gr":"κατά","tr":"kata","caso":"genitivo","es":"contra","cod":"PREP +gen.","letra":"✦"},{"gr":"κατά","tr":"kata","caso":"acusativo","es":"según, conforme a","cod":"PREP +acu.","letra":"✦"},{"gr":"μετά","tr":"meta","caso":"genitivo","es":"con","cod":"PREP +gen.","letra":"✦"},{"gr":"μετά","tr":"meta","caso":"acusativo","es":"después de, detrás de","cod":"PREP +acu.","letra":"✦"},{"gr":"παρά","tr":"para","caso":"genitivo","es":"de parte de, procedente de","cod":"PREP +gen.","letra":"✦"},{"gr":"παρά","tr":"para","caso":"dativo","es":"junto a, al lado de","cod":"PREP +dat.","letra":"✦"},{"gr":"παρά","tr":"para","caso":"acusativo","es":"al lado de","cod":"PREP +acu.","letra":"✦"},{"gr":"περί","tr":"peri","caso":"genitivo","es":"acerca de, sobre","cod":"PREP +gen.","letra":"✦"},{"gr":"περί","tr":"peri","caso":"acusativo","es":"alrededor de, aproximadamente","cod":"PREP +acu.","letra":"✦"},{"gr":"πρό","tr":"pro","caso":"genitivo","es":"antes de","cod":"PREP +gen.","letra":"✦"},{"gr":"πρός","tr":"pros","caso":"acusativo","es":"a, hacia","cod":"PREP +acu.","letra":"✦"},{"gr":"σύν","tr":"sun","caso":"dativo","es":"con, junto con","cod":"PREP +dat.","letra":"✦"},{"gr":"ὑπέρ","tr":"huper","caso":"genitivo","es":"en lugar de, a favor de, por","cod":"PREP +gen.","letra":"✦"},{"gr":"ὑπέρ","tr":"huper","caso":"acusativo","es":"sobre, encima de","cod":"PREP +acu.","letra":"✦"},{"gr":"ὑπό","tr":"hupo","caso":"genitivo","es":"por, por acción de","cod":"PREP +gen.","letra":"✦"},{"gr":"ὑπό","tr":"hupo","caso":"acusativo","es":"bajo, debajo de","cod":"PREP +acu.","letra":"✦"}];
+
+// ── Helpers de categoría ──────────────────────────────────────
+function getCat(cod) {
+  const c = cod.toUpperCase();
+  if (c.startsWith('VB')) return 'VB';
+  if (c.startsWith('MSN')) return 'MSN';
+  if (c.startsWith('FSN')) return 'FSN';
+  if (c.startsWith('NSN')) return 'NSN';
+  if (c.startsWith('ADJ')) return 'ADJ';
+  if (c.startsWith('PREP')) return 'PREP';
+  if (c.startsWith('PRON') || c.startsWith('ART')) return 'PRON';
+  return 'OTRO';
+}
+
+function catLabel(cat) {
+  return { VB:'Verbo', MSN:'Masc.', FSN:'Fem.', NSN:'Neutro',
+           ADJ:'Adj.', PREP:'Prep.', PRON:'Pron.', OTRO:'Otro' }[cat] || cat;
+}
+
+function badgeStyle(cat) {
+  const map = {
+    VB:   'background:#3ecf7e;color:#052e16',
+    MSN:  'background:#4a8fe8;color:#fff',
+    FSN:  'background:#a78bfa;color:#fff',
+    NSN:  'background:#f59e0b;color:#1c1400',
+    ADJ:  'background:#2dd4bf;color:#042f2e',
+    PREP: 'background:#2dd4bf;color:#042f2e',
+    PRON: 'background:#f472b6;color:#4a0020',
+    OTRO: 'background:#8892a4;color:#111',
+  };
+  return map[cat] || map.OTRO;
+}
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function entryKey(e) { return String(e.id); }
+function entryState(e) { return studyState[entryKey(e)] || {}; }
+function isKnown(e) { return !!entryState(e).known; }
+function isFav(e) { return !!entryState(e).fav; }
+
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; }
+  catch { return {}; }
+}
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(studyState));
+}
+
+function mutateEntry(id, patch) {
+  const key = String(id);
+  studyState[key] = { ...(studyState[key] || {}), ...patch, updatedAt: Date.now() };
+  saveProgress();
+}
+
+// ── Estado ────────────────────────────────────────────────────
+let query = '';
+let activeCat = 'ALL';
+let currentMode = 'lista';
+let filtered = [...DICCIONARIO];
+let sortMode = 'alpha';
+let onlyFav = false;
+let onlyPending = false;
+let activeLetter = 'ALL';
+let lastModalId = null;
+let greekKeyboardActive = false;
+const STORAGE_KEY = 'koineDuffDictionaryProgress.v2';
+let studyState = loadProgress();
+
+// Flashcard state
+let fcDeck = [];
+let fcIdx = 0;
+let fcFlipped = false;
+let fcOkCount = 0;
+let fcFailCount = 0;
+const THEME_KEY = 'koineDuffDictionaryTheme.v1';
+
+function setTheme(theme) {
+  const nextTheme = theme === 'dark' ? 'dark' : 'light';
+  document.body.dataset.theme = nextTheme;
+  localStorage.setItem(THEME_KEY, nextTheme);
+  document.getElementById('themeLight')?.classList.toggle('active', nextTheme === 'light');
+  document.getElementById('themeDark')?.classList.toggle('active', nextTheme === 'dark');
+}
+
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  setTheme(saved || (prefersDark ? 'dark' : 'light'));
+}
+
+// ── Normalizar texto ──────────────────────────────────────────
+function normalize(str) {
+  return String(str ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ς/g, 'σ')
+    .toLowerCase()
+    .trim();
+}
+
+function looseGreek(str) {
+  return normalize(str)
+    .replace(/[ηε]/g, 'ε')
+    .replace(/[ωο]/g, 'ο')
+    .replace(/[ιυ]/g, 'ι');
+}
+
+function toGreekKeyboard(text) {
+  const digraphs = [
+    ['th', 'θ'], ['ph', 'φ'], ['ch', 'χ'], ['ps', 'ψ'], ['ks', 'ξ'],
+    ['rh', 'ῥ'], ['ou', 'ου'], ['ai', 'αι'], ['ei', 'ει'], ['oi', 'οι'],
+    ['au', 'αυ'], ['eu', 'ευ'], ['ui', 'υι'], ['oo', 'ω'], ['ee', 'η']
+  ];
+  const letters = {
+    a:'α', b:'β', c:'κ', d:'δ', e:'ε', f:'φ', g:'γ', h:'η',
+    i:'ι', j:'ξ', k:'κ', l:'λ', m:'μ', n:'ν', o:'ο', p:'π',
+    q:'θ', r:'ρ', s:'σ', t:'τ', u:'υ', v:'β', w:'ω', x:'χ',
+    y:'υ', z:'ζ',
+    A:'Α', B:'Β', C:'Κ', D:'Δ', E:'Ε', F:'Φ', G:'Γ', H:'Η',
+    I:'Ι', J:'Ξ', K:'Κ', L:'Λ', M:'Μ', N:'Ν', O:'Ο', P:'Π',
+    Q:'Θ', R:'Ρ', S:'Σ', T:'Τ', U:'Υ', V:'Β', W:'Ω', X:'Χ',
+    Y:'Υ', Z:'Ζ',
+    á:'ά', é:'έ', í:'ί', ó:'ό', ú:'ύ', Á:'Ά', É:'Έ', Í:'Ί', Ó:'Ό', Ú:'Ύ',
+    ñ:'ν', Ñ:'Ν'
+  };
+
+  let out = '';
+  for (let i = 0; i < text.length;) {
+    const pair = text.slice(i, i + 2).toLowerCase();
+    const hit = digraphs.find(([latin]) => latin === pair);
+    if (hit) {
+      out += text[i] === text[i].toUpperCase() ? hit[1].toUpperCase() : hit[1];
+      i += 2;
+      continue;
+    }
+    out += letters[text[i]] || text[i];
+    i++;
+  }
+  return out
+    .replace(/ς(?=[\u0370-\u03ff\u1f00-\u1fff])/g, 'σ')
+    .replace(/σ(?![\u0370-\u03ff\u1f00-\u1fff])/g, 'ς');
+}
+
+function setGreekKeyboard(active) {
+  greekKeyboardActive = active;
+  const btn = document.getElementById('greekKeyBtn');
+  const input = document.getElementById('searchInput');
+  btn.classList.toggle('active', greekKeyboardActive);
+  btn.setAttribute('aria-pressed', String(greekKeyboardActive));
+  input.placeholder = greekKeyboardActive
+    ? 'Teclado griego activo: escribe agape, logos, theos...'
+    : 'Buscar en griego (ἀγάπη) o español (amor)...';
+  if (greekKeyboardActive && input.value) {
+    input.value = toGreekKeyboard(input.value);
+    query = input.value;
+    showAutocomplete();
+    search();
+  }
+}
+
+function searchScore(e, q, qNorm) {
+  if (!q) return 1;
+  const grLow = e.gr.toLowerCase();
+  const grNorm = normalize(e.gr);
+  const grLoose = looseGreek(e.gr);
+  const qLoose = looseGreek(q);
+  const tr = e.tr.toLowerCase();
+  const es = normalize(e.es);
+  const cod = e.cod.toLowerCase();
+  if (grLow === q || grNorm === qNorm || tr === q) return 100;
+  if (grLow.startsWith(q) || grNorm.startsWith(qNorm) || tr.startsWith(q)) return 80;
+  if (qLoose && grLoose.startsWith(qLoose)) return 70;
+  if (es.startsWith(qNorm)) return 65;
+  if (grLow.includes(q) || grNorm.includes(qNorm) || tr.includes(q)) return 50;
+  if (qLoose && grLoose.includes(qLoose)) return 45;
+  if (es.includes(qNorm)) return 35;
+  if (cod.includes(q)) return 20;
+  const tokens = qNorm.split(/\s+/).filter(Boolean);
+  if (tokens.length && tokens.every(t => `${grNorm} ${tr} ${es} ${cod}`.includes(t))) return 15;
+  return 0;
+}
+
+function sortEntries(items, scored = null) {
+  const arr = [...items];
+  if (scored) arr.sort((a, b) => (scored.get(b.id) || 0) - (scored.get(a.id) || 0) || a.gr.localeCompare(b.gr, 'el'));
+  else if (sortMode === 'category') arr.sort((a, b) => getCat(a.cod).localeCompare(getCat(b.cod)) || a.gr.localeCompare(b.gr, 'el'));
+  else if (sortMode === 'known') arr.sort((a, b) => Number(isKnown(b)) - Number(isKnown(a)) || a.gr.localeCompare(b.gr, 'el'));
+  else if (sortMode === 'review') arr.sort((a, b) => (entryState(b).bad || 0) - (entryState(a).bad || 0) || Number(isKnown(a)) - Number(isKnown(b)));
+  else if (sortMode === 'random') arr.sort(() => Math.random() - 0.5);
+  else arr.sort((a, b) => a.gr.localeCompare(b.gr, 'el'));
+  return arr;
+}
+
+// ── Búsqueda y filtro ─────────────────────────────────────────
+function search() {
+  const q = query.trim().toLowerCase();
+  const qNorm = normalize(q);
+  const scored = new Map();
+
+  filtered = DICCIONARIO.filter(e => {
+    if (activeCat !== 'ALL' && getCat(e.cod) !== activeCat) return false;
+    if (activeLetter !== 'ALL' && e.letra !== activeLetter) return false;
+    if (onlyFav && !isFav(e)) return false;
+    if (onlyPending && isKnown(e)) return false;
+    const score = searchScore(e, q, qNorm);
+    if (q && !score) return false;
+    scored.set(e.id, score);
+    return true;
+  });
+
+  filtered = sortEntries(filtered, q ? scored : null);
+  document.getElementById('countShown').textContent = filtered.length;
+  updatePowerStats();
+
+  if (currentMode === 'lista') renderLista();
+  else startFlash();
+}
+
+// ── Render lista ──────────────────────────────────────────────
+function renderLista() {
+  const list = document.getElementById('resultsList');
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="emoji">🔍</div>
+      <h3>Sin resultados</h3>
+      <p>Prueba otra búsqueda, letra o filtro de estudio</p>
+    </div>`;
+    return;
+  }
+
+  let out = '';
+  let lastLetra = null;
+
+  filtered.forEach(e => {
+    const cat = getCat(e.cod);
+    const state = entryState(e);
+    if (e.letra !== lastLetra && !query && sortMode !== 'random') {
+      const count = filtered.filter(x => x.letra === e.letra).length;
+      out += `<div class="letra-sep">
+        <span>${esc(e.letra)}</span>
+        <hr/>
+        <small>${count} entrada${count !== 1 ? 's' : ''}</small>
+      </div>`;
+      lastLetra = e.letra;
+    }
+    out += `<div class="cat-${cat}">
+      <div class="entry-card ${state.known ? 'known' : ''}" onclick="openModal(${e.id})">
+        <div class="card-header">
+          <div class="card-greek">${esc(e.gr)}</div>
+          <span class="card-badge" style="${badgeStyle(cat)}">${catLabel(cat)}</span>
+        </div>
+        <div class="card-translit">${esc(e.tr)}</div>
+        <div class="card-morpho">${esc(e.cod)}</div>
+        <div class="card-meaning">${esc(e.es)}</div>
+        <div class="score-note">${state.good || 0} aciertos · ${state.bad || 0} repasos</div>
+        <div class="card-actions">
+          <button class="mini-action ${state.fav ? 'active' : ''}" title="Favorita" onclick="event.stopPropagation();toggleFavorite(${e.id})">${state.fav ? '★' : '☆'}</button>
+          <button class="mini-action ${state.known ? 'active' : ''}" title="Aprendida" onclick="event.stopPropagation();toggleKnown(${e.id})">✓</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  list.innerHTML = out;
+}
+
+// ── Autocomplete ──────────────────────────────────────────────
+let acIdx = -1;
+let acVisible = false;
+
+function showAutocomplete() {
+  const q = query.trim().toLowerCase();
+  const qNorm = normalize(q);
+  const ac = document.getElementById('autocomplete');
+
+  if (!q || q.length < 1) { ac.className = ''; return; }
+
+  const hits = DICCIONARIO.filter(e => {
+    if (activeCat !== 'ALL' && getCat(e.cod) !== activeCat) return false;
+    return e.gr.toLowerCase().startsWith(q) ||
+           normalize(e.gr).startsWith(qNorm) ||
+           looseGreek(e.gr).startsWith(looseGreek(q)) ||
+           e.tr.toLowerCase().startsWith(q) ||
+           normalize(e.es).startsWith(qNorm);
+  }).slice(0, 8);
+
+  if (!hits.length) { ac.className = ''; return; }
+
+  ac.className = 'open';
+  acVisible = true;
+  acIdx = -1;
+
+  ac.innerHTML = hits.map((e, i) => {
+    const cat = getCat(e.cod);
+    return `<div class="ac-item" data-idx="${i}" onmousedown="selectAC(event, ${DICCIONARIO.indexOf(e)})">
+      <span class="ac-greek">${highlight(e.gr, q)}</span>
+      <span class="ac-translit">${e.tr}</span>
+      <span class="ac-es">${highlight(e.es, qNorm, true)}</span>
+      <span class="ac-badge" style="${badgeStyle(cat)}">${catLabel(cat)}</span>
+    </div>`;
+  }).join('');
+}
+
+function highlight(text, q, norm = false) {
+  if (!q) return esc(text);
+  const src = norm ? normalize(text) : text.toLowerCase();
+  const idx = src.indexOf(q);
+  if (idx < 0) return esc(text);
+  return esc(text.slice(0, idx)) +
+    `<b style="color:var(--azul-lt)">${esc(text.slice(idx, idx + q.length))}</b>` +
+    esc(text.slice(idx + q.length));
+}
+
+function selectAC(ev, id) {
+  ev.preventDefault();
+  const entry = DICCIONARIO[id] || DICCIONARIO.find(e => !e.id && id === 0);
+  openModal(id);
+  document.getElementById('autocomplete').className = '';
+  acVisible = false;
+}
+
+function hideAC() {
+  setTimeout(() => {
+    document.getElementById('autocomplete').className = '';
+    acVisible = false;
+  }, 150);
+}
+
+// ── Navegación teclado en autocomplete ───────────────────────
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  const ac = document.getElementById('autocomplete');
+  const items = ac.querySelectorAll('.ac-item');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    acIdx = Math.min(acIdx + 1, items.length - 1);
+    items.forEach((el, i) => el.classList.toggle('selected', i === acIdx));
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acIdx = Math.max(acIdx - 1, -1);
+    items.forEach((el, i) => el.classList.toggle('selected', i === acIdx));
+  } else if (e.key === 'Enter' && acIdx >= 0) {
+    items[acIdx]?.dispatchEvent(new MouseEvent('mousedown'));
+  } else if (e.key === 'Escape') {
+    ac.className = '';
+  }
+});
+
+// ── Input handler ─────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+  if (greekKeyboardActive) {
+    const before = e.target.value;
+    const after = toGreekKeyboard(before);
+    if (before !== after) e.target.value = after;
+  }
+  query = e.target.value;
+  document.getElementById('clearBtn').className = query ? 'clear-btn visible' : 'clear-btn';
+  showAutocomplete();
+  search();
+});
+document.getElementById('searchInput').addEventListener('blur', hideAC);
+document.getElementById('greekKeyBtn').addEventListener('click', () => {
+  setGreekKeyboard(!greekKeyboardActive);
+  document.getElementById('searchInput').focus();
+});
+document.getElementById('clearBtn').addEventListener('click', () => {
+  query = '';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('clearBtn').className = 'clear-btn';
+  document.getElementById('autocomplete').className = '';
+  search();
+  document.getElementById('searchInput').focus();
+});
+
+// ── Tabs ──────────────────────────────────────────────────────
+document.getElementById('tabsWrap').addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  activeCat = btn.dataset.cat;
+  search();
+});
+
+// ── Modos ─────────────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('btnLista').className = 'mode-btn' + (mode === 'lista' ? ' active' : '');
+  document.getElementById('btnFlash').className = 'mode-btn' + (mode === 'flash' ? ' active' : '');
+  document.getElementById('resultsList').className = mode === 'flash' ? 'hidden' : '';
+  document.getElementById('flashcard-wrap').className = mode === 'flash' ? 'active' : '';
+  if (mode === 'flash') startFlash();
+}
+
+// ── Flashcards ────────────────────────────────────────────────
+function startFlash() {
+  fcDeck = [...filtered].sort((a, b) => {
+    const sa = entryState(a), sb = entryState(b);
+    return Number(sa.known) - Number(sb.known) || (sb.bad || 0) - (sa.bad || 0) || Math.random() - 0.5;
+  });
+  fcIdx = 0;
+  fcOkCount = 0;
+  fcFailCount = 0;
+  fcFlipped = false;
+  updateFcStats();
+  showCard();
+}
+
+function showCard() {
+  if (!fcDeck.length) {
+    document.getElementById('flashcard').innerHTML = `<div style="text-align:center;padding:20px">
+      <div style="font-size:36px;margin-bottom:12px">🎉</div>
+      <div style="font-size:18px;color:var(--verde);font-weight:700">¡Mazo completado!</div>
+      <div style="font-size:13px;color:var(--gris);margin-top:8px">Aprendidas: ${fcOkCount} · Repasar: ${fcFailCount}</div>
+      <button class="fc-btn primary" onclick="startFlash()" style="margin-top:16px">↺ Repetir</button>
+    </div>`;
+    return;
+  }
+
+  const card = fcDeck[fcIdx];
+  fcFlipped = false;
+  const fc = document.getElementById('flashcard');
+  fc.classList.remove('flipped');
+  fc.onclick = flipCard;
+
+  document.getElementById('fcGreek').textContent   = card.gr;
+  document.getElementById('fcTranslit').textContent = card.tr;
+  document.getElementById('fcCod').textContent      = card.cod;
+  document.getElementById('fcMeaning').textContent  = card.es;
+  document.getElementById('fcCodBack').textContent  = card.cod;
+  document.getElementById('fcLetra').textContent    = card.letra;
+
+  const pct = Math.round((fcIdx / fcDeck.length) * 100);
+  document.getElementById('fcBar').style.width = pct + '%';
+  document.getElementById('fcLabel').textContent = `Carta ${fcIdx + 1} de ${fcDeck.length}`;
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
+}
+
+function fcAnswer(correct) {
+  if (!fcFlipped) { flipCard(); return; }
+  const card = fcDeck[fcIdx];
+  const state = entryState(card);
+  if (correct) {
+    fcOkCount++;
+    mutateEntry(card.id, { good: (state.good || 0) + 1, known: true });
+  } else {
+    fcFailCount++;
+    mutateEntry(card.id, { bad: (state.bad || 0) + 1, known: false });
+    fcDeck.push(card);
+  }
+  fcIdx++;
+  showCard();
+  updateFcStats();
+  updatePowerStats();
+}
+
+function updateFcStats() {
+  document.getElementById('fcOk').textContent   = fcOkCount;
+  document.getElementById('fcFail').textContent = fcFailCount;
+  document.getElementById('fcPend').textContent = Math.max(0, (fcDeck.length || filtered.length) - fcIdx);
+}
+
+// ── Modal detalle ─────────────────────────────────────────────
+function openModal(id) {
+  const e = DICCIONARIO[id];
+  if (!e) return;
+  lastModalId = id;
+  const cat = getCat(e.cod);
+
+  const colorMap = {
+    VB:'#6ee7b7', MSN:'#6ba4f0', FSN:'#c4b5fd',
+    NSN:'#fcd34d', ADJ:'#5eead4', PREP:'#5eead4',
+    PRON:'#f9a8d4', OTRO:'#8892a4'
+  };
+
+  document.getElementById('modalGreek').textContent = e.gr;
+  document.getElementById('modalGreek').style.color = colorMap[cat] || '#e8eaf0';
+  document.getElementById('modalTranslit').textContent = e.tr;
+
+  // Parsear código morfológico
+  let morfoRows = '';
+  const codParts = e.cod.split(' - ');
+  const catFull = { VB:'Verbo', MSN:'Sust. Masculino', FSN:'Sust. Femenino',
+    NSN:'Sust. Neutro', ADJ:'Adjetivo', ADV:'Adverbio', PRON:'Pronombre',
+    CONJ:'Conjunción', PREP:'Preposición', PART:'Partícula', NUM:'Numeral',
+    ART:'Artículo', INTERJ:'Interjección' };
+  const catName = catFull[codParts[0]?.trim()] || codParts[0] || '—';
+  const extra = codParts[1] || '';
+
+  morfoRows = `
+    <div class="modal-row">
+      <div class="modal-label">Significado</div>
+      <div class="modal-value meaning-val">${esc(e.es)}</div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-label">Griego</div>
+      <div class="modal-value greek-val">${esc(e.gr)}</div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-label">Translit.</div>
+      <div class="modal-value">${esc(e.tr)}</div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-label">Categoría</div>
+      <div class="modal-value">
+        <span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;${badgeStyle(cat)}">${catLabel(cat)}</span>
+        <span style="color:var(--gris);font-size:12px;margin-left:8px">${catName}</span>
+      </div>
+    </div>`;
+
+  if (extra) {
+    morfoRows += `<div class="modal-row">
+      <div class="modal-label">Morfología</div>
+      <div class="modal-value" style="font-family:var(--greek-font);color:var(--azul-lt)">${esc(extra)}</div>
+    </div>`;
+  }
+
+  if (e.caso) {
+    morfoRows += `<div class="modal-row">
+      <div class="modal-label">Caso(s)</div>
+      <div class="modal-value">${esc(e.caso)}</div>
+    </div>`;
+  }
+
+  morfoRows += `<div class="modal-row">
+    <div class="modal-label">Letra</div>
+    <div class="modal-value" style="font-family:var(--greek-font);font-size:16px">${esc(e.letra)}</div>
+  </div>`;
+
+  document.getElementById('modalBody').innerHTML = morfoRows;
+  updateModalActions();
+  document.getElementById('modalOverlay').className = 'modal-overlay open';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').className = 'modal-overlay';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+
+
+function buildLetters() {
+  const letters = ['ALL', ...new Set(DICCIONARIO.map(e => e.letra))];
+  document.getElementById('letterRow').innerHTML = letters.map(l =>
+    `<button class="letter-chip ${activeLetter === l ? 'active' : ''}" data-letter="${esc(l)}" title="${l === 'ALL' ? 'Todas' : 'Letra ' + l}">${l === 'ALL' ? '•' : esc(l)}</button>`
+  ).join('');
+}
+
+function updatePowerStats() {
+  const total = DICCIONARIO.length;
+  const known = DICCIONARIO.filter(isKnown).length;
+  const favs = DICCIONARIO.filter(isFav).length;
+  document.getElementById('statsText').innerHTML =
+    `Mostrando <b id="countShown">${filtered.length}</b> de ${total} entradas · <b>${known}</b> aprendidas · <b>${favs}</b> favoritas`;
+  document.getElementById('favToggle').classList.toggle('active', onlyFav);
+  document.getElementById('pendingToggle').classList.toggle('active', onlyPending);
+}
+
+function refreshAll() {
+  buildLetters();
+  search();
+  if (lastModalId !== null && document.getElementById('modalOverlay').classList.contains('open')) updateModalActions();
+}
+
+function toggleFavorite(id) {
+  const e = DICCIONARIO[id]; if (!e) return;
+  mutateEntry(id, { fav: !isFav(e) });
+  refreshAll();
+}
+
+function toggleKnown(id) {
+  const e = DICCIONARIO[id]; if (!e) return;
+  mutateEntry(id, { known: !isKnown(e) });
+  refreshAll();
+}
+
+function updateModalActions() {
+  const e = DICCIONARIO[lastModalId]; if (!e) return;
+  const fav = document.getElementById('modalFavBtn');
+  const known = document.getElementById('modalKnownBtn');
+  fav.textContent = isFav(e) ? '★ Favorita' : '☆ Favorita';
+  known.textContent = isKnown(e) ? '✓ Aprendida' : '✓ Aprendida';
+  fav.classList.toggle('active', isFav(e));
+  known.classList.toggle('active', isKnown(e));
+}
+
+async function copyLemma(id) {
+  const e = DICCIONARIO[id]; if (!e) return;
+  const text = `${e.gr} · ${e.tr} · ${e.es} · ${e.cod}`;
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const tmp = document.createElement('textarea');
+    tmp.value = text; document.body.appendChild(tmp); tmp.select();
+    document.execCommand('copy'); tmp.remove();
+  }
+}
+
+function exportStudy() {
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    learned: DICCIONARIO.filter(isKnown).map(e => ({ gr:e.gr, tr:e.tr, es:e.es, cod:e.cod })),
+    favorites: DICCIONARIO.filter(isFav).map(e => ({ gr:e.gr, tr:e.tr, es:e.es, cod:e.cod })),
+    raw: studyState
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'progreso-diccionario-koine.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function resetProgress() {
+  if (!confirm('¿Reiniciar favoritas, aprendidas y estadísticas?')) return;
+  studyState = {};
+  saveProgress();
+  refreshAll();
+}
+
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortMode = e.target.value;
+  search();
+});
+document.getElementById('favToggle').addEventListener('click', () => {
+  onlyFav = !onlyFav;
+  search();
+});
+document.getElementById('pendingToggle').addEventListener('click', () => {
+  onlyPending = !onlyPending;
+  search();
+});
+document.getElementById('studyNowBtn').addEventListener('click', () => setMode('flash'));
+document.getElementById('exportBtn').addEventListener('click', exportStudy);
+document.getElementById('resetBtn').addEventListener('click', resetProgress);
+document.getElementById('letterRow').addEventListener('click', e => {
+  const btn = e.target.closest('.letter-chip'); if (!btn) return;
+  activeLetter = btn.dataset.letter;
+  buildLetters();
+  search();
+});
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'g') {
+    e.preventDefault();
+    setGreekKeyboard(!greekKeyboardActive);
+    document.getElementById('searchInput').focus();
+  }
+  if (currentMode === 'flash' && e.key === ' ') {
+    e.preventDefault();
+    flipCard();
+  }
+});
+
+// ── Init ──────────────────────────────────────────────────────
+// Asignar IDs correctos al array (por si las dudas)
+DICCIONARIO.forEach((e, i) => { if (e.id === undefined) e.id = i; });
+
+initTheme();
+buildLetters();
+search();
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+Clave inicial generada para esta versión:
+
+koine-ae98eff9-303707bf
+
+No subas este archivo a GitHub.
+Si quieres una clave propia, reconstruye con:
+
+DICCIONARIO_CLAVE="tu-clave-larga" /Users/juanfra/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node work/build_github_pages_secure.mjs
