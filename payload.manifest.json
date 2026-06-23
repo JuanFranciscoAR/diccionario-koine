@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "algorithm": "PBKDF2-SHA256/AES-256-GCM",
+  "iterations": 310000,
+  "salt": "VWNpxjUtfN6QmpWiaZy9WQ==",
+  "iv": "obXh/LC3aqJPtde/",
+  "chunks": [
+    "payload/chunk-00.txt",
+    "payload/chunk-01.txt",
+    "payload/chunk-02.txt",
+    "payload/chunk-03.txt",
+    "payload/chunk-04.txt",
+    "payload/chunk-05.txt",
+    "payload/chunk-06.txt",
+    "payload/chunk-07.txt",
+    "payload/chunk-08.txt",
+    "payload/chunk-09.txt",
+    "payload/chunk-10.txt",
+    "payload/chunk-11.txt"
+  ]
+}
